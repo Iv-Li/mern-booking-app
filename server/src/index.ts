@@ -1,19 +1,48 @@
-const path = require('path')
+import path from 'path';
 
 const mainEnvFile = path.resolve(__dirname, '.env');
 const additionalEnv = path.resolve(__dirname, `.env.${process.env.NODE_ENV}`);
 
-import dotenv = require('dotenv')
+import dotenv from 'dotenv'
 dotenv.config({path: additionalEnv})
 dotenv.config({path: mainEnvFile})
 
-require('module-alias/register')
+//import 'module-alias/register'
+import 'express-async-errors'
 
-import express = require('express')
+import express from 'express'
+//import cors from 'cors'
+import cookieParser from 'cookie-parser';
+import morgan from 'morgan'
+
+import connectDB from '@/db/connectDB';
+import { authRouter } from '@/routes';
+import { errorHandler } from '@/middleware';
 
 const app = express();
 const PORT = process.env.PORT
 
-app.listen(PORT, () => {
-  console.log(`Server is listening on port: ${PORT}`)
-})
+//app.use(cors())
+app.use(cookieParser())
+app.use(express.json())
+app.use(morgan('dev'))
+
+app.use('/api/v1/auth', authRouter)
+
+app.use(errorHandler)
+
+
+const start = async () => {
+  try {
+    await connectDB()
+    const server = app.listen(PORT)
+
+    const serverAdress = server.address();
+    console.log({ serverAdress });
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+start()
+

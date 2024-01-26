@@ -13,7 +13,7 @@
     "allowJs": true,
     "sourceMap": true,
     "removeComments": true,
-    "esModuleInterop": false,
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
