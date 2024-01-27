@@ -23,7 +23,7 @@ const app = express();
 const PORT = process.env.PORT
 
 //app.use(cors())
-app.use(cookieParser())
+app.use(cookieParser(process.env.COOKIE_SECRET))
 app.use(express.json())
 app.use(morgan('dev'))
 

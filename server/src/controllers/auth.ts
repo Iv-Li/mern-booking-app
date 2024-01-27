@@ -3,7 +3,8 @@ import { check, type ValidationChain } from 'express-validator';
 import { StatusCodes } from 'http-status-codes';
 import { BadRequest } from '@/errors';
 import { User } from '@/models';
-import { checkFieldValidation } from '@/utils';
+import { checkFieldValidation, jwt } from '@/utils';
+
 const registerValidation = (): ValidationChain[] =>
   ([
     check('firstName')
@@ -34,8 +35,12 @@ const register = async (req: Request, res: Response) => {
   }
 
   const user = await User.create({...req.body})
+  const { _id, password: _p, ...rest} = user.toObject()
 
-  res.status(StatusCodes.OK).json({ success: 'success', data: user })
+  const userData = { firstName: rest.firstName, lastName: rest.lastName, email: rest.email }
+  jwt.attachCookieToResponse({ res, user: userData })
+
+  res.status(StatusCodes.OK).json({ success: 'success', data: rest })
 }
 
 
