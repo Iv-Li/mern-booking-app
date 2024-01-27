@@ -1,27 +1,17 @@
 import { Request, Response } from 'express';
-import { check, type ValidationChain } from 'express-validator';
+import { type ValidationChain } from 'express-validator';
 import { StatusCodes } from 'http-status-codes';
 import { BadRequest } from '@/errors';
 import { User } from '@/models';
-import { checkFieldValidation, jwt } from '@/utils';
+import { checkFieldValidation, jwt, validators } from '@/utils';
+const { firstNameValidator, lastNameValidator, emailValidator, passwordValidator } = validators
 
 const registerValidation = (): ValidationChain[] =>
   ([
-    check('firstName')
-      .isString().withMessage('First name should be a string')
-      .isLength({ min: 3, max: 50 }).withMessage('First name should be between 3 and 50 characters'),
-
-    check('lastName')
-      .isString().withMessage('Last name should be a string')
-      .isLength({ min: 3, max: 50 }).withMessage('Last name should be between 3 and 50 characters'),
-
-    check('email')
-      .isEmail().withMessage('Invalid email address'),
-
-    check('password')
-      .isString().withMessage('Password should be a string')
-      .notEmpty().withMessage('Password should not be empty')
-      .isLength({ min: 6 }).withMessage('Password should be at least 6 characters long'),
+    firstNameValidator(),
+    lastNameValidator(),
+    emailValidator(),
+    passwordValidator()
   ])
 const register = async (req: Request, res: Response) => {
   checkFieldValidation(req)
@@ -35,8 +25,35 @@ const register = async (req: Request, res: Response) => {
   }
 
   const user = await User.create({...req.body})
-  const { _id, password: _p, ...rest} = user.toObject()
+  const { password: _p, ...rest} = user.toObject()
 
+  const userData = { firstName: rest.firstName, lastName: rest.lastName, email: rest.email }
+  jwt.attachCookieToResponse({ res, user: userData })
+
+  res.status(StatusCodes.OK).json({ success: 'success', data: rest })
+}
+
+
+const loginValidation = () => ([
+  emailValidator(),
+  passwordValidator()
+])
+
+const login = async (req: Request, res: Response) => {
+  checkFieldValidation(req)
+
+  const { email, password } = req.body
+  const user = await User.findOne({ email })
+  if(!user) {
+    throw new BadRequest(`Invalid Credentials`)
+  }
+
+  const isPasswordMatched = await user.comparePassword(password)
+  if(!isPasswordMatched) {
+    throw new BadRequest(`Invalid Credentials`)
+  }
+
+  const { password: _p, ...rest} = user.toObject()
   const userData = { firstName: rest.firstName, lastName: rest.lastName, email: rest.email }
   jwt.attachCookieToResponse({ res, user: userData })
 
@@ -46,5 +63,7 @@ const register = async (req: Request, res: Response) => {
 
 export {
   register,
-  registerValidation
+  registerValidation,
+  login,
+  loginValidation
 }

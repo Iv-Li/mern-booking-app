@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
-import type { IUser } from '@/shared/types';
+import type { IUser, IUserMethods, IUserModel } from '@/shared/types';
 import validator from 'validator';
 import bcrypt from 'bcrypt'
 
-const UserSchema = new mongoose.Schema<IUser>({
+const UserSchema = new mongoose.Schema<IUser, IUserModel, IUserMethods>({
   firstName: {
     type: String,
     require: [true, 'First name should be provided'],
@@ -37,5 +37,10 @@ UserSchema.pre('save', async function (){
   this.password = await bcrypt.hash(this.password, salt)
 })
 
+UserSchema.methods.comparePassword = async function (comparedPassword: string): Promise<boolean> {
+  const isMatched = await bcrypt.compare(comparedPassword, this.password)
+  return isMatched
+}
 
-export const User = mongoose.model<IUser>('User', UserSchema)
+
+export const User = mongoose.model<IUser, IUserModel>('User', UserSchema)

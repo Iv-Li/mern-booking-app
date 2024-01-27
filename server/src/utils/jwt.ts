@@ -2,7 +2,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken'
 import { Response } from 'express';
 import { IUser } from '@/shared/types';
 
-export type IUserJWT = Partial<Omit<IUser, 'password' | '_id'>>
+export type IUserJWT = Partial<Omit<IUser, 'password'>>
 export const createJWT = ({ payload }: { payload: JwtPayload }): string => {
   return jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: process.env.JWT_LONG})
 }
