@@ -1,11 +1,11 @@
-import { Request } from 'express';
+import type { Request } from 'express';
 import { validationResult } from 'express-validator';
 import { BadRequest } from '@/errors';
-export const checkFieldValidation = (req: Request) => {
+export const checkFieldValidation = (req: Request): void => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    let errsMsg = errors.formatWith<string>(err => err.msg).array().join('\n')
+    const errsMsg = errors.formatWith<string>(err => err.msg).array().join('\n')
     throw new BadRequest(errsMsg)
   }
 }

@@ -1,9 +1,10 @@
-import { Request, Response } from 'express';
+import { type Response } from 'express';
 import { type ValidationChain } from 'express-validator';
 import { StatusCodes } from 'http-status-codes';
 import { BadRequest } from '@/errors';
 import { User } from '@/models';
 import { checkFieldValidation, jwt, validators } from '@/utils';
+import type { TypedRequestBody, IUser } from '@/shared/types';
 const { firstNameValidator, lastNameValidator, emailValidator, passwordValidator } = validators
 
 const registerValidation = (): ValidationChain[] =>
@@ -13,7 +14,7 @@ const registerValidation = (): ValidationChain[] =>
     emailValidator(),
     passwordValidator()
   ])
-const register = async (req: Request, res: Response) => {
+const register = async (req: TypedRequestBody<IUser>, res: Response): Promise<void | never> => {
   checkFieldValidation(req)
 
   const { email } = req.body
@@ -34,12 +35,12 @@ const register = async (req: Request, res: Response) => {
 }
 
 
-const loginValidation = () => ([
+const loginValidation = (): ValidationChain[] => ([
   emailValidator(),
   passwordValidator()
 ])
 
-const login = async (req: Request, res: Response) => {
+const login = async (req: TypedRequestBody<IUser>, res: Response): Promise<void | never> => {
   checkFieldValidation(req)
 
   const { email, password } = req.body
