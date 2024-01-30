@@ -2,13 +2,14 @@ import jwt, { type JwtPayload } from 'jsonwebtoken'
 import { type Response } from 'express';
 import type { IUser } from '@/shared/types';
 
-export type IUserJWT = Partial<Omit<IUser, 'password'>>
-export const createJWT = ({ payload }: { payload: JwtPayload }): string => {
+export type UserJWT = Partial<Pick<IUser, 'firstName' | 'lastName' | '_id'>>
+export interface IUserJWT extends JwtPayload, UserJWT {}
+export const createJWT = ({ payload }: { payload: IUserJWT }): string => {
   return jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: process.env.JWT_LONG})
 }
 
-export const isTokenValid = (token: string): JwtPayload | string => {
-  return jwt.verify(token, process.env.JWT_SECRET as string)
+export const isTokenValid = (token: string): IUserJWT => {
+  return jwt.verify(token, process.env.JWT_SECRET as string) as IUserJWT
 }
 
 export const attachCookieToResponse = ({ res, user }: { res: Response, user: IUserJWT }): void => {

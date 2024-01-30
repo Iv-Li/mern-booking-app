@@ -8,7 +8,8 @@ import cookieParser from 'cookie-parser';
 import morgan from 'morgan'
 
 import connectDB from '@/db/connectDB';
-import { authRouter } from '@/routes';
+import configCloudinary from '@/db/configCloudinary';
+import { authRouter, myHotelsRouter } from '@/routes';
 import { errorHandler } from '@/middleware';
 
 const mainEnvFile = path.resolve(__dirname, '.env');
@@ -26,6 +27,7 @@ app.use(express.json())
 app.use(morgan('dev'))
 
 app.use('/api/v1/auth', authRouter)
+app.use('/api/v1/my-hotels', myHotelsRouter)
 
 app.use(errorHandler)
 
@@ -33,6 +35,7 @@ app.use(errorHandler)
 const start = async (): Promise<void> => {
   try {
     await connectDB()
+    configCloudinary()
     const server = app.listen(PORT)
 
     const serverAdress = server.address();
