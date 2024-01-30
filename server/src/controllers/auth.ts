@@ -28,7 +28,7 @@ const register = async (req: TypedRequestBody<IUser>, res: Response): Promise<vo
   const user = await User.create({...req.body})
   const { password: _p, ...rest} = user.toObject()
 
-  const userData = { firstName: rest.firstName, lastName: rest.lastName, email: rest.email }
+  const userData = { firstName: rest.firstName, lastName: rest.lastName, email: rest.email, _id: rest._id }
   jwt.attachCookieToResponse({ res, user: userData })
 
   res.status(StatusCodes.OK).json({ success: 'success', data: rest })
@@ -55,7 +55,7 @@ const login = async (req: TypedRequestBody<IUser>, res: Response): Promise<void 
   }
 
   const { password: _p, ...rest} = user.toObject()
-  const userData = { firstName: rest.firstName, lastName: rest.lastName, email: rest.email }
+  const userData = { firstName: rest.firstName, lastName: rest.lastName, email: rest.email, _id: rest._id }
   jwt.attachCookieToResponse({ res, user: userData })
 
   res.status(StatusCodes.OK).json({ success: 'success', data: rest })

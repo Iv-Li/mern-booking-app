@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { Hotel } from '@/models';
 import { NotFound } from '@/errors';
-import { body } from 'express-validator';
+import { body, ValidationChain } from 'express-validator';
 import type { IHotel } from '@/shared/types';
 import { uploadImagesToCloud } from '@/utils/uploadFiles';
 const getAllMyHotels = async (req: Request, res: Response): Promise<void>  => {
@@ -17,7 +17,7 @@ const getAllMyHotels = async (req: Request, res: Response): Promise<void>  => {
 }
 
 
-const checkMyHotelFields = () => ([
+const checkMyHotelFields = (): ValidationChain[] => ([
   body("name").notEmpty().withMessage("Name is required"),
   body("city").notEmpty().withMessage("City is required"),
   body("country").notEmpty().withMessage("Country is required"),
@@ -33,25 +33,69 @@ const checkMyHotelFields = () => ([
     .withMessage("Facilities are required"),
 ])
 
-const addMyHotel = async (req: Request, res: Response) => {
+const addMyHotel = async (req: Request, res: Response): Promise<void> => {
+  const { _id: userId } = req.user
+
   const myHotel: IHotel = req.body
 
   const files = req.files as Express.Multer.File[]
   const imgUrls = await uploadImagesToCloud(files)
 
   myHotel.imageUrls = imgUrls
+  myHotel.userId = userId!
+  myHotel.lastUpdated = new Date()
 
   const hotel = await Hotel.create(myHotel)
+
   res.status(StatusCodes.CREATED).json({ message: 'success', data: hotel })
 
 }
 
-/*const editMyHotel = (req: Request, res: Response) => {
+const getOneMyHotel = async (req: Request, res: Response): Promise<void> => {
+  const { hotelId } = req.params
+  const { _id: userId } = req.user
 
-}*/
+  const hotel = await Hotel.findOne({ _id: hotelId, userId })
+
+  if(!hotelId) {
+    throw new NotFound('Hotel not found')
+  }
+
+  res.status(StatusCodes.OK).json({ message: 'success', data: hotel })
+}
+const editMyHotel = async (req: Request, res: Response): Promise<void> => {
+  const { hotelId } = req.params
+  const { _id } = req.user
+  const updatedHotel: IHotel = req.body
+  updatedHotel.lastUpdated = new Date()
+
+  const myHotel = await Hotel.findOneAndUpdate(
+    { _id: hotelId, userId: _id },
+    { $set: updatedHotel },
+    {new: true}
+    )
+
+  if(!myHotel) {
+    throw new NotFound('Hotel not found')
+  }
+
+  const files = req.files as Express.Multer.File[]
+  const imgUrls = await uploadImagesToCloud(files)
+
+  myHotel.imageUrls = [
+    ...imgUrls,
+    ...(myHotel?.imageUrls || [])
+  ]
+
+  myHotel.save()
+
+  res.status(StatusCodes.OK).json({ message: 'success', data: myHotel })
+}
 
 export {
   getAllMyHotels,
   checkMyHotelFields,
-  addMyHotel
+  addMyHotel,
+  getOneMyHotel,
+  editMyHotel
 }

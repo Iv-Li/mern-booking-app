@@ -9,10 +9,10 @@ const upload = multer({
   }
 })
 
-const uploadFilesMiddleware = () => upload.array('images', 6)
+const uploadFilesMiddleware = () => upload.array('imageUrls', 6)
 const uploadImagesToCloud = async (images: Express.Multer.File[]): Promise<string[]> => {
   const uploadPromises = images.map(async img => {
-    console.log({ img })
+
     const b64 = img.buffer.toString('base64')
     let dataURI = "data:" + img.mimetype + ";base64," + b64;
     const res = await cloudinary.v2.uploader.upload(dataURI);
