@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 import { BadRequest } from '@/errors';
 import { User } from '@/models';
 import { checkFieldValidation, jwt, validators } from '@/utils';
-import type { TypedRequestBody, IUser } from '@/shared/types';
+import type { TypedRequestBody, IUser } from '@/shared/types/types';
 const { firstNameValidator, lastNameValidator, emailValidator, passwordValidator } = validators
 
 const registerValidation = (): ValidationChain[] =>

@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { Hotel } from '@/models';
 import { NotFound } from '@/errors';
-import { body, ValidationChain } from 'express-validator';
-import type { IHotel } from '@/shared/types';
+import { body, type ValidationChain } from 'express-validator';
+import type { IHotel } from '@/shared/types/types';
 import { uploadImagesToCloud } from '@/utils/uploadFiles';
 const getAllMyHotels = async (req: Request, res: Response): Promise<void>  => {
   try {
@@ -42,7 +42,7 @@ const addMyHotel = async (req: Request, res: Response): Promise<void> => {
   const imgUrls = await uploadImagesToCloud(files)
 
   myHotel.imageUrls = imgUrls
-  myHotel.userId = userId!
+  myHotel.userId = userId
   myHotel.lastUpdated = new Date()
 
   const hotel = await Hotel.create(myHotel)
@@ -87,7 +87,7 @@ const editMyHotel = async (req: Request, res: Response): Promise<void> => {
     ...(myHotel?.imageUrls || [])
   ]
 
-  myHotel.save()
+  await myHotel.save()
 
   res.status(StatusCodes.OK).json({ message: 'success', data: myHotel })
 }

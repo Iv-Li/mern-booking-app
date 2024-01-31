@@ -9,7 +9,7 @@ import morgan from 'morgan'
 
 import connectDB from '@/db/connectDB';
 import configCloudinary from '@/db/configCloudinary';
-import { authRouter, myHotelsRouter } from '@/routes';
+import { authRouter, myHotelsRouter, hotelsRouter } from '@/routes';
 import { errorHandler } from '@/middleware';
 
 const mainEnvFile = path.resolve(__dirname, '.env');
@@ -29,6 +29,7 @@ app.use(morgan('dev'))
 
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/my-hotels', myHotelsRouter)
+app.use('/api/v1/hotels', hotelsRouter)
 
 app.use(errorHandler)
 

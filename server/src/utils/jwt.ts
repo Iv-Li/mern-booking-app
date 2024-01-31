@@ -1,6 +1,6 @@
 import jwt, { type JwtPayload } from 'jsonwebtoken'
 import { type Response } from 'express';
-import type { IUser } from '@/shared/types';
+import type { IUser } from '@/shared/types/types';
 
 export type UserJWT = Pick<IUser, 'firstName' | 'lastName' | '_id'>
 export interface IUserJWT extends JwtPayload, UserJWT {}

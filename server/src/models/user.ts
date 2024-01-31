@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import type { IUser, IUserMethods, IUserModel } from '@/shared/types';
+import type { IUser, IUserMethods, IUserModel } from '@/shared/types/types';
 import validator from 'validator';
 import bcrypt from 'bcrypt'
 

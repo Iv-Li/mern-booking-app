@@ -30,6 +30,7 @@ module.exports = {
         "@typescript-eslint/non-nullable-type-assertion-style": "off",
         "@typescript-eslint/strict-boolean-expressions": "off",
         "@typescript-eslint/no-confusing-void-expression": "off",
+        "@typescript-eslint/no-namespace": "off",
         "@typescript-eslint/ban-types": "warn",
         "@typescript-eslint/no-misused-promises": "warn"
     }

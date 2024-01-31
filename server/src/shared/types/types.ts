@@ -51,8 +51,18 @@ interface IBooking {
   totalCost: number;
 }
 
+type SearchQueries = 'destination' | 'adultCount' | 'childCount' | 'facilities' | 'types' | 'stars' | 'maxPrice' | 'page'
+type SortingOptions = 'starRating' | 'pricePerNightAsc' | 'pricePerNightDesc'
+
+type SearchQueryMap = {
+  [K in SearchQueries]: string
+} & {
+  sortOption?: SortingOptions
+}
+
 export type {
   IUser, IUserMethods, IUserModel,
   TypedRequestBody,
-  IHotel, IBooking
+  IHotel, IBooking,
+  SearchQueryMap, SortingOptions
 }

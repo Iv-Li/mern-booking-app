@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import { Unauthenticated } from '@/errors';
-import { isTokenValid, IUserJWT } from '@/utils/jwt';
+import { isTokenValid, type IUserJWT } from '@/utils/jwt';
 
 declare global {
   namespace Express {
@@ -10,14 +10,14 @@ declare global {
   }
 }
 
-export const verifyToken = (req: Request, _res: Response, next: NextFunction) => {
+export const verifyToken = (req: Request, _res: Response, next: NextFunction): void | never => {
   const { token } = req.signedCookies
   if(!token) {
     throw new Unauthenticated('Unauthenticated. Token absent')
   }
 
   try {
-    const payload = isTokenValid(token)
+    const payload = isTokenValid(token as string)
     req.user = payload
     next()
   } catch (err) {
