@@ -1,4 +1,4 @@
-const isObjectWithMessage = (obj: unknown): obj is { message: string } => {
+export const isObjectWithMessage = (obj: unknown): obj is { message: string } => {
   return (
     typeof obj === 'object' &&
     obj !== null &&
@@ -6,19 +6,19 @@ const isObjectWithMessage = (obj: unknown): obj is { message: string } => {
     typeof (obj as { message: unknown }).message === 'string'
   );
 }
-export const throwError = (err: unknown): never => {
-  if (err instanceof Error) {
-    throw new Error(err.message)
-  }
 
-  if (isObjectWithMessage(err)) {
-    throw new Error(err.message)
+export const getErrorMsg = (err: unknown): string => {
+  if (err instanceof Error || isObjectWithMessage(err)) {
+    return err.message
   }
-
 
   if(typeof err === 'string') {
-    throw new Error(err)
+    return err
   }
 
-  throw new Error('Something went wrong. Please retry later!')
+  return 'Something went wrong. Please retry later!'
+}
+export const throwError = (err: unknown): never => {
+  const msg = getErrorMsg(err)
+  throw new Error(msg)
 }

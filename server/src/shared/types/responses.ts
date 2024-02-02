@@ -11,3 +11,7 @@ export interface IHotelSearchRes extends ResMessage{
     pages: number
   }
 }
+
+export interface MyHotelsRes extends ResMessage {
+  data: IHotel[]
+}

@@ -1,5 +1,6 @@
 import type { RegisterFormData, LoginFormData } from '@/types';
 import { throwError } from '@/utils';
+import type { MyHotelsRes } from 'server/shared/types';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
@@ -58,4 +59,17 @@ export const addHotel = async (formData: FormData) => {
   }
 
   return resBody
+}
+
+export const fetchMyHotels = async (): Promise<MyHotelsRes> | never => {
+  const res = await fetch(`${BASE_URL}/my-hotels`, {
+    method: 'GET',
+    credentials: 'include',
+  })
+
+  if(!res.ok) {
+    throwError('Error fetching hotels')
+  }
+
+  return res.json()
 }

@@ -5,7 +5,8 @@ import { NotFound } from '@/errors';
 import { body, type ValidationChain } from 'express-validator';
 import type { IHotel } from '@/shared/types/types';
 import { uploadImagesToCloud } from '@/utils/uploadFiles';
-const getAllMyHotels = async (req: Request, res: Response): Promise<void>  => {
+import type { MyHotelsRes } from '@/shared/types';
+const getAllMyHotels = async (req: Request, res: Response<MyHotelsRes>): Promise<void>  => {
   try {
     const { _id } = req.user
     const hotels = await Hotel.find({ userId: _id })
