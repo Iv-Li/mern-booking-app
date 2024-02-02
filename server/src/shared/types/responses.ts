@@ -15,3 +15,7 @@ export interface IHotelSearchRes extends ResMessage{
 export interface MyHotelsRes extends ResMessage {
   data: IHotel[]
 }
+
+export interface IMyHotelDetailsRes extends ResMessage {
+  data: IHotel
+}

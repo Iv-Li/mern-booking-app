@@ -23,4 +23,11 @@ export type HotelFormData = {
   imageFiles: FileList;
   adultCount: number;
   childCount: number;
-};
+}
+
+export type GuestInfoFormData = {
+  checkIn: Date;
+  checkOut: Date;
+  adultCount: number;
+  childCount: number;
+}

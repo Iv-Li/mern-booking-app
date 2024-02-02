@@ -5,7 +5,7 @@ import { NotFound } from '@/errors';
 import { body, type ValidationChain } from 'express-validator';
 import type { IHotel } from '@/shared/types/types';
 import { uploadImagesToCloud } from '@/utils/uploadFiles';
-import type { MyHotelsRes } from '@/shared/types';
+import type { IMyHotelDetailsRes, MyHotelsRes } from '@/shared/types';
 const getAllMyHotels = async (req: Request, res: Response<MyHotelsRes>): Promise<void>  => {
   try {
     const { _id } = req.user
@@ -52,13 +52,13 @@ const addMyHotel = async (req: Request, res: Response): Promise<void> => {
 
 }
 
-const getOneMyHotel = async (req: Request, res: Response): Promise<void> => {
+const getOneMyHotel = async (req: Request, res: Response<IMyHotelDetailsRes>): Promise<void> => {
   const { hotelId } = req.params
   const { _id: userId } = req.user
 
-  const hotel = await Hotel.findOne({ _id: hotelId, userId })
+  const hotel = await Hotel.findOne<IHotel>({ _id: hotelId, userId })
 
-  if(!hotelId) {
+  if(!hotelId || !hotel) {
     throw new NotFound('Hotel not found')
   }
 

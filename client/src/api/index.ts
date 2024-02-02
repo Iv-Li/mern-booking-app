@@ -1,6 +1,6 @@
 import type { RegisterFormData, LoginFormData } from '@/types';
 import { throwError } from '@/utils';
-import type { MyHotelsRes } from 'server/shared/types';
+import type { IMyHotelDetailsRes, MyHotelsRes } from 'server/shared/types';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
@@ -72,4 +72,19 @@ export const fetchMyHotels = async (): Promise<MyHotelsRes> | never => {
   }
 
   return res.json()
+}
+
+export const fetchMyHotelById = async (hotelId: string): Promise<IMyHotelDetailsRes> | never => {
+  const res = await fetch(`${BASE_URL}/my-hotels/${hotelId}`, {
+    method: 'GET',
+    credentials: 'include',
+  })
+
+  const resBody = await res.json()
+
+  if(!res.ok) {
+    throwError(resBody)
+  }
+
+  return resBody
 }

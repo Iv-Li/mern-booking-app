@@ -32,6 +32,6 @@ module.exports = {
         "@typescript-eslint/no-confusing-void-expression": "off",
         "@typescript-eslint/no-namespace": "off",
         "@typescript-eslint/ban-types": "warn",
-        "@typescript-eslint/no-misused-promises": "warn"
+        "@typescript-eslint/no-misused-promises": "off"
     }
 }
