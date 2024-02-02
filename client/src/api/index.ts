@@ -40,3 +40,22 @@ export const login = async (formData: LoginFormData) => {
 
   return resBody
 }
+
+export const addHotel = async (formData: FormData) => {
+  const res = await fetch(`${BASE_URL}/my-hotels`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(formData)
+  })
+
+  const resBody = await res.json()
+
+  if (!res.ok) {
+    throwError(resBody)
+  }
+
+  return resBody
+}

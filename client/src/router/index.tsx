@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { ERoutes } from '@/types';
 import { MainLayout } from '@/components/layoutes';
-import { Home, Login, Register } from '@/pages';
+import { Home, Login, Register, AddHotel } from '@/pages';
 
 export const router = createBrowserRouter([
   {
@@ -31,7 +31,11 @@ export const router = createBrowserRouter([
       {
         path: ERoutes.SEARCH,
         element: <>Search</>
-      }
+      },
+      {
+        path: ERoutes.ADD_HOTEL,
+        element: <AddHotel />
+      },
     ]
   }
 ])

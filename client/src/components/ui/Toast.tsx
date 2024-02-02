@@ -14,7 +14,7 @@ export const Toast = ({ message, type, onClose }: IToastProps) => {
     return () => {
       clearTimeout(timerId)
     }
-  }, [])
+  }, [onClose])
   const styles = type === 'success' ? 'bg-green-600' : 'bg-red-600'
 
   return (
