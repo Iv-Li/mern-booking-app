@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { ERoutes } from '@/types';
 import { MainLayout } from '@/components/layoutes';
-import { Home } from '@/pages';
+import { Home, Login, Register } from '@/pages';
 
 export const router = createBrowserRouter([
   {
@@ -11,6 +11,14 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <Home />
+      },
+      {
+        path: ERoutes.REGISTER,
+        element: <Register />
+      },
+      {
+        path: ERoutes.LOGIN,
+        element: <Login />
       },
       {
         path: ERoutes.MY_HOTELS,

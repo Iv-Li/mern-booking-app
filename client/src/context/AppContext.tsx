@@ -15,7 +15,7 @@ export const AppContextProvider = ({ children }: PropsWithChildren) => {
 
   return (
     <AppContext.Provider value={{
-      showToast: setToastMsg
+      showToast: (msg: ToastMessage) => setToastMsg(msg)
     }}>
       {toastMsg && (
         <Toast

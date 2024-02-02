@@ -9,7 +9,7 @@ interface IToastProps {
 export const Toast = ({ message, type, onClose }: IToastProps) => {
 
   useEffect(() => {
-    const timerId = setTimeout(() => onClose())
+    const timerId = setTimeout(() => onClose(), 1000)
 
     return () => {
       clearTimeout(timerId)

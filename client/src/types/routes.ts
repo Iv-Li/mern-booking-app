@@ -3,6 +3,7 @@ export enum ERoutes {
   SEARCH = '/hotels/search',
   MY_BOOKINGS = '/my-bookings',
   MY_HOTELS = '/my-hotels',
-  LOGIN = '/auth/login',
-  LOGOUT = '/auth/logout',
+  LOGIN = 'login',
+  LOGOUT = 'logout',
+  REGISTER = 'register',
 }
