@@ -4,6 +4,7 @@ import { constructedSearchQuery } from '@/utils';
 import { StatusCodes } from 'http-status-codes';
 import type { SearchQueryMap, IHotelSearchRes } from '@/shared/types';
 import { setSortOption } from '@/utils/constructedQuery';
+import { convertedHotelsWithTimestamp } from '@/utils';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 const searchHotel = async (req: Request<{}, {}, {}, SearchQueryMap>, res: Response<IHotelSearchRes>): Promise<void> => {
@@ -14,15 +15,15 @@ const searchHotel = async (req: Request<{}, {}, {}, SearchQueryMap>, res: Respon
   const skip = (page - 1) * pageSize
 
   const sortOprions  = setSortOption(req.query.sortOption)
-  const hotel = await Hotel.find(query).sort(sortOprions).skip(skip).limit(pageSize)
+  const hotels = await Hotel.find(query).sort(sortOprions).skip(skip).limit(pageSize)
   const total = await Hotel.countDocuments(query)
 
   const response = {
     message: 'success',
-    data: hotel,
+    data: convertedHotelsWithTimestamp(hotels),
     pagination: {
       total,
-      page: hotel.length > 0 ? page : 0,
+      page: hotels.length > 0 ? page : 0,
       pages: Math.ceil(total / pageSize)
     }
   } as const

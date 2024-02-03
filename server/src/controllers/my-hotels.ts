@@ -10,7 +10,7 @@ import { convertedHotelsWithTimestamp, convertOneHotelWithTimestamp } from '@/ut
 const getAllMyHotels = async (req: Request, res: Response<MyHotelsRes>): Promise<void>  => {
   try {
     const { _id } = req.user
-    const hotels = await Hotel.find({ userId: _id }).lean<IHotel[]>()
+    const hotels = await Hotel.find({ userId: _id })
 
     res.status(StatusCodes.OK).json({ message: 'success', data: convertedHotelsWithTimestamp(hotels) })
   } catch (err) {
@@ -57,13 +57,13 @@ const getOneMyHotel = async (req: Request, res: Response<IMyHotelDetailsRes>): P
   const { hotelId } = req.params
   const { _id: userId } = req.user
 
-  const hotel = await Hotel.findOne<IHotel>({ _id: hotelId, userId })
+  const hotel = await Hotel.findOne({ _id: hotelId, userId })
 
   if(!hotelId || !hotel) {
     throw new NotFound('Hotel not found')
   }
 
-  res.status(StatusCodes.OK).json({ message: 'success', data: convertOneHotelWithTimestamp(hotel) })
+  res.status(StatusCodes.OK).json({ message: 'success', data: convertOneHotelWithTimestamp(hotel.toObject()) })
 }
 const editMyHotel = async (req: Request, res: Response): Promise<void> => {
   const { hotelId } = req.params
@@ -89,7 +89,9 @@ const editMyHotel = async (req: Request, res: Response): Promise<void> => {
     ...(myHotel?.imageUrls || [])
   ]
 
-  const hotel = convertOneHotelWithTimestamp(await myHotel.save())
+  await myHotel.save()
+
+  const hotel = convertOneHotelWithTimestamp(myHotel.toObject())
 
   res.status(StatusCodes.OK).json({ message: 'success', data: hotel })
 }
