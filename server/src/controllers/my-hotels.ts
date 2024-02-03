@@ -6,12 +6,13 @@ import { body, type ValidationChain } from 'express-validator';
 import type { IHotel } from '@/shared/types/types';
 import { uploadImagesToCloud } from '@/utils/uploadFiles';
 import type { IMyHotelDetailsRes, MyHotelsRes } from '@/shared/types';
+import { convertedHotelsWithTimestamp, convertOneHotelWithTimestamp } from '@/utils';
 const getAllMyHotels = async (req: Request, res: Response<MyHotelsRes>): Promise<void>  => {
   try {
     const { _id } = req.user
-    const hotels = await Hotel.find({ userId: _id })
+    const hotels = await Hotel.find({ userId: _id }).lean<IHotel[]>()
 
-    res.status(StatusCodes.OK).json({ message: 'success', data: hotels })
+    res.status(StatusCodes.OK).json({ message: 'success', data: convertedHotelsWithTimestamp(hotels) })
   } catch (err) {
     throw new NotFound('Hotels not found')
   }
@@ -34,7 +35,7 @@ const checkMyHotelFields = (): ValidationChain[] => ([
     .withMessage("Facilities are required"),
 ])
 
-const addMyHotel = async (req: Request, res: Response): Promise<void> => {
+const addMyHotel = async (req: Request, res: Response<IMyHotelDetailsRes>): Promise<void> => {
   const { _id: userId } = req.user
 
   const myHotel: IHotel = req.body
@@ -48,7 +49,7 @@ const addMyHotel = async (req: Request, res: Response): Promise<void> => {
 
   const hotel = await Hotel.create(myHotel)
 
-  res.status(StatusCodes.CREATED).json({ message: 'success', data: hotel })
+  res.status(StatusCodes.CREATED).json({ message: 'success', data: convertOneHotelWithTimestamp(hotel)  })
 
 }
 
@@ -62,7 +63,7 @@ const getOneMyHotel = async (req: Request, res: Response<IMyHotelDetailsRes>): P
     throw new NotFound('Hotel not found')
   }
 
-  res.status(StatusCodes.OK).json({ message: 'success', data: hotel })
+  res.status(StatusCodes.OK).json({ message: 'success', data: convertOneHotelWithTimestamp(hotel) })
 }
 const editMyHotel = async (req: Request, res: Response): Promise<void> => {
   const { hotelId } = req.params
@@ -88,9 +89,9 @@ const editMyHotel = async (req: Request, res: Response): Promise<void> => {
     ...(myHotel?.imageUrls || [])
   ]
 
-  await myHotel.save()
+  const hotel = convertOneHotelWithTimestamp(await myHotel.save())
 
-  res.status(StatusCodes.OK).json({ message: 'success', data: myHotel })
+  res.status(StatusCodes.OK).json({ message: 'success', data: hotel })
 }
 
 export {

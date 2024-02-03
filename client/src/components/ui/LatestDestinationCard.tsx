@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
-import { IHotel } from 'server/shared/types';
+import { IHotelRes } from 'server/shared/types';
 
 interface ILatestDestinationCardProps {
-  hotel: IHotel
+  hotel: IHotelRes
 }
 
 export const LatestDestinationCard = ({ hotel }: ILatestDestinationCardProps) => {
