@@ -11,7 +11,7 @@ const upload = multer({
 })
 
 type UploadMiddleware = (req: Request, res: Response, next: NextFunction) => void;
-const uploadFilesMiddleware = (): UploadMiddleware => upload.array('imageUrls', 6)
+const uploadFilesMiddleware = (): UploadMiddleware => upload.array('imageFiles', 6)
 const uploadImagesToCloud = async (images: Express.Multer.File[]): Promise<string[]> => {
   const uploadPromises = images.map(async img => {
 

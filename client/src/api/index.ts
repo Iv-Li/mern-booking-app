@@ -88,3 +88,22 @@ export const fetchMyHotelById = async (hotelId: string): Promise<IMyHotelDetails
 
   return resBody
 }
+
+export const editMyHotel = async (formData: FormData): Promise<IMyHotelDetailsRes> => {
+  const res = await fetch(`${BASE_URL}/my-hotels/${formData.get('hotelId')}`, {
+    method: 'PATCH',
+    credentials: 'include',
+    headers: {
+      'Content-type': 'application/json'
+    },
+    body: JSON.stringify(formData)
+  })
+
+  const resBody = await res.json()
+
+  if(!res.ok) {
+    throwError(resBody)
+  }
+
+  return resBody
+}

@@ -1,6 +1,7 @@
 export enum ERoutes {
   HOME = '/',
   ADD_HOTEL='/add-hotel',
+  EDIT_HOTEL='/edit-hotel',
   HOTEL_DETAILS='/hotel-details',
   SEARCH = '/hotels/search',
   MY_BOOKINGS = '/my-bookings',

@@ -1,3 +1,5 @@
+import { IHotelRes } from 'server/shared/types';
+
 export const hotels = Array.from({ length: 10 }).fill({
   "_id": "65b91f04f1fc8a8db5beaf7b",
   "userId": "65b8ea30765bc5ecf4e3bf98",
@@ -18,7 +20,7 @@ export const hotels = Array.from({ length: 10 }).fill({
     "http://res.cloudinary.com/dugwkhap9/image/upload/v1706630916/ias8az6mqntbupscc4fk.png",
     "http://res.cloudinary.com/dugwkhap9/image/upload/v1706630916/pbn7jhvffymgmwuibukk.png"
   ],
-  "lastUpdated": "2024-01-30T16:13:43.081Z",
+  "lastUpdated": 1706631223081,
   "bookings": [],
   "__v": 0
-})
+} as IHotelRes) as IHotelRes[]

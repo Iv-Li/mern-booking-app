@@ -12,6 +12,7 @@ export type LoginFormData = {
 }
 
 export type HotelFormData = {
+  hotelId?: string
   name: string;
   city: string;
   country: string;
@@ -21,6 +22,7 @@ export type HotelFormData = {
   starRating: number;
   facilities: string[];
   imageFiles: FileList;
+  imageUrls: string[];
   adultCount: number;
   childCount: number;
 }

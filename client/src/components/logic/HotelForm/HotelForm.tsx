@@ -1,20 +1,43 @@
 import { FormProvider, useForm } from 'react-hook-form';
 import { type HotelFormData } from '@/types';
-import { DetailsSection } from '@/components/logic/AddHotelForm/DetailsSection.tsx';
-import { TypeSection } from '@/components/logic/AddHotelForm/TypeSection.tsx';
-import { FacilitiesSection } from '@/components/logic/AddHotelForm/FacilitiesSection.tsx';
-import { GuestSection } from '@/components/logic/AddHotelForm/GuestSection.tsx';
-import { ImgSection } from '@/components/logic/AddHotelForm/ImgSection.tsx';
+import { DetailsSection } from '@/components/logic/HotelForm/DetailsSection.tsx';
+import { TypeSection } from '@/components/logic/HotelForm/TypeSection.tsx';
+import { FacilitiesSection } from '@/components/logic/HotelForm/FacilitiesSection.tsx';
+import { GuestSection } from '@/components/logic/HotelForm/GuestSection.tsx';
+import { ImgSection } from '@/components/logic/HotelForm/ImgSection.tsx';
+import { IHotelRes } from 'server/shared/types';
+import { useEffect } from 'react';
 
 interface IAddHotelForm {
+  hotel: IHotelRes | undefined
   onSave: (data: FormData) => void
   isLoading: boolean
 }
-export const AddHotelForm = ({ onSave, isLoading }: IAddHotelForm) => {
+export const HotelForm = ({ onSave, isLoading, hotel }: IAddHotelForm) => {
   const formMethods = useForm<HotelFormData>()
-  const { handleSubmit } = formMethods
+  const { handleSubmit, reset, formState: { isValid, errors,  } } = formMethods
 
-  const onSubmit = handleSubmit((data: HotelFormData) => {
+  useEffect(() => {
+    if (!hotel) return
+    const {
+      name, city, country, description, type, pricePerNight, starRating, facilities, imageUrls, adultCount, childCount
+    } = hotel
+    reset({
+      name,
+      city,
+      country,
+      description,
+      type,
+      pricePerNight,
+      starRating,
+      facilities,
+      imageUrls,
+      adultCount,
+      childCount,
+    })
+  }, [hotel, reset])
+
+  const onSubmit = handleSubmit((data: HotelFormData, e) => {
     const {
       name,
       city,
@@ -24,10 +47,18 @@ export const AddHotelForm = ({ onSave, isLoading }: IAddHotelForm) => {
       pricePerNight,
       starRating,
       facilities,
+      imageUrls,
       imageFiles,
       adultCount,
       childCount } = data
+    e?.preventDefault()
+
+    if(!isValid) return
     const formData = new FormData()
+
+    if(hotel) {
+      formData.append('hotelId', hotel._id)
+    }
 
     formData.append('name', name)
     formData.append('city', city)
@@ -44,11 +75,17 @@ export const AddHotelForm = ({ onSave, isLoading }: IAddHotelForm) => {
     })
 
     Array.from(imageFiles).forEach((url, index) => {
-      formData.append(`url[${index}]`, url)
+      formData.append(`imageFiles[${index}]`, url)
+    })
+
+    imageUrls.forEach((url, index) => {
+      formData.append(`imageUrls[${index}]`, url)
     })
 
     onSave(formData)
   })
+
+  console.log({ isValid, errors })
 
   return (
     <FormProvider {...formMethods}>

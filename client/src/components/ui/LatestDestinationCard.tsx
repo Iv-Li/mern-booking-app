@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { IHotelRes } from 'server/shared/types';
+import type { IHotelRes } from 'server/shared/types';
+import { ERoutes } from '@/types';
 
 interface ILatestDestinationCardProps {
   hotel: IHotelRes
@@ -8,7 +9,7 @@ interface ILatestDestinationCardProps {
 export const LatestDestinationCard = ({ hotel }: ILatestDestinationCardProps) => {
   return (
     <Link
-      to={`/detail/${hotel._id}`}
+      to={`${ERoutes.HOTEL_DETAILS}/${hotel._id}`}
       className="relative cursor-pointer overflow-hidden rounded-md"
     >
       <div className="h-[300px]">

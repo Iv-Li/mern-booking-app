@@ -1,4 +1,4 @@
-import { AddHotelForm } from '@/components/logic';
+import { HotelForm } from '@/components/logic';
 import { useMutation } from '@tanstack/react-query';
 import { addHotel } from '@/api';
 import { useAppContext } from '@/context/AppContext.tsx';
@@ -19,6 +19,6 @@ export const AddHotel = () => {
     mutate(data)
   }
   return (
-    <AddHotelForm onSave={onSave} isLoading={isPending}/>
+    <HotelForm onSave={onSave} isLoading={isPending}/>
   )
 }

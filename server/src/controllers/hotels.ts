@@ -1,10 +1,9 @@
 import type { Request, Response } from 'express';
 import { Hotel } from '@/models';
-import { constructedSearchQuery } from '@/utils';
+import { constructedSearchQuery, convertedHotelsWithTimestamp } from '@/utils';
 import { StatusCodes } from 'http-status-codes';
 import type { SearchQueryMap, IHotelSearchRes } from '@/shared/types';
 import { setSortOption } from '@/utils/constructedQuery';
-import { convertedHotelsWithTimestamp } from '@/utils';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 const searchHotel = async (req: Request<{}, {}, {}, SearchQueryMap>, res: Response<IHotelSearchRes>): Promise<void> => {
