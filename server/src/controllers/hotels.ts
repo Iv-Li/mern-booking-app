@@ -16,7 +16,7 @@ const searchHotel = async (req: Request<{}, {}, {}, SearchQueryMap>, res: Respon
   const sortOprions  = setSortOption(req.query.sortOption)
   const hotels = await Hotel.find(query).sort(sortOprions).skip(skip).limit(pageSize)
   const total = await Hotel.countDocuments(query)
-
+  console.log({hotels})
   const response = {
     message: 'success',
     data: convertedHotelsWithTimestamp(hotels),
