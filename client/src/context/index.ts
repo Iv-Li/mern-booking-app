@@ -1,1 +1,2 @@
-export * from './AppContext.ts'
+export * from './AppContext.tsx'
+export * from './SearchContext.tsx'

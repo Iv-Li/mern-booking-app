@@ -10,7 +10,7 @@ interface IAppContext {
 }
 
 const AppContext = createContext<IAppContext | null>(null)
-export const AppContextProvider = ({ children }: PropsWithChildren) => {
+const AppContextProvider = ({ children }: PropsWithChildren) => {
   const [toastMsg, setToastMsg] = useState<ToastMessage | null>(null)
 
   return (
@@ -31,7 +31,13 @@ export const AppContextProvider = ({ children }: PropsWithChildren) => {
   )
 }
 
-export const useAppContext = () => {
+const useAppContext = () => {
   const context = useContext(AppContext)
   return context as IAppContext
+}
+
+export {
+  AppContextProvider,
+  // eslint-disable-next-line react-refresh/only-export-components
+  useAppContext
 }

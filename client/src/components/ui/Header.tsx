@@ -6,7 +6,7 @@ export const Header = () => {
   const isLogged = false
 
   return (
-    <header className="bg-blue-800 py-6">
+    <header className="bg-blue-800 pt-6 pb-14">
       <div className="container mx-auto flex justify-between">
         <span className="text-3xl text-white font-bold tracking-tight">
           <Link to={ERoutes.HOME}>Iv.G.Holiday.com</Link>
