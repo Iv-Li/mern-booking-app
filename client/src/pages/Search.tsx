@@ -3,7 +3,7 @@ import { ChangeEvent, useCallback, useState } from 'react';
 import { FacilitiesFilter, HotelTypesFilter, PriceFilter, StarRatingFilter } from '@/components/ui/filters';
 import { useQuery } from '@tanstack/react-query';
 import { searchHotels } from '@/api';
-import { SearchResultCard } from '@/components/ui';
+import { Pagination, SearchResultCard } from '@/components/ui';
 
 export const Search = () => {
   const search = useSearchContext()
@@ -12,6 +12,7 @@ export const Search = () => {
   const [selectedHotelTypes, setSelectedHotelTypes] = useState<string[]>([])
   const [selectedFacilities, setSelectedFacilities] = useState<string[]>([])
   const [selectedPrice, setSelectedPrice] = useState<number | undefined>()
+  const [activePage, setActivePage] = useState<number>(1)
 
   const searchParams = {
     destination: search.destination,
@@ -24,7 +25,7 @@ export const Search = () => {
     facilities: selectedFacilities,
     maxPrice: selectedPrice?.toString(),
     sortOption: selectedSortOption,
-    // TODO: add page
+    page: activePage.toString()
   }
 
   const { data } = useQuery({
@@ -35,7 +36,6 @@ export const Search = () => {
   })
 
   const hotels = data?.data
-  console.log({ hotels })
 
   const onStarRatingChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const star = e.target.value
@@ -73,7 +73,8 @@ export const Search = () => {
   const onPriceChange = useCallback((price?: number) => {
     setSelectedPrice(price)
   }, [setSelectedPrice])
-
+  console.log({ pagination: data?.pagination})
+  console.log(data?.pagination?.pages)
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-5">
       <div className="rounded-lg border border-slate-300 p-5 h-fit sticky top-10">
@@ -109,10 +110,16 @@ export const Search = () => {
           </select>
         </div>
         {hotels?.map(hotel => (
-          <SearchResultCard hotel={hotel}/>
+          <SearchResultCard hotel={hotel} key={hotel._id}/>
         ))}
         <div>
-          {/* TODO: Pagination */}
+          {(
+            <Pagination
+              currentPage={activePage}
+              totalPagesAmount={data?.pagination.pages || 0}
+              onPageChange={setActivePage}
+            />
+          )}
         </div>
       </div>
     </div>
