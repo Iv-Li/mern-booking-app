@@ -5,8 +5,18 @@ const bookingSchema = new mongoose.Schema<IBooking>({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   email: { type: String, required: true },
-  adultCount: { type: Number, required: true },
-  childCount: { type: Number, required: true },
+  adultCount: {
+    type: Number,
+    required: true,
+    min: [1, 'Amount of adult can`t be less than 10'],
+    max: [10, 'Amount of adult can`t be bigger than 10'],
+  },
+  childCount: {
+    type: Number,
+    required: true,
+    min: [0, 'Amount of child can`t be less than 0'],
+    max: [10, 'Amount of child can`t be bigger than 10'],
+  },
   checkIn: { type: Date, required: true },
   checkOut: { type: Date, required: true },
   userId: {

@@ -1,6 +1,5 @@
-import { type Model } from 'mongoose';
+import type { Model, Types } from 'mongoose';
 import { type Request } from 'express';
-import { Types } from 'mongoose';
 interface IUser {
   _id: string
   firstName: string
