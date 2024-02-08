@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { ERoutes } from '@/types';
 import { MainLayout } from '@/components/layoutes';
-import { Home, Login, Register, AddHotel, MyHotels, HotelDetails, EditHotel, Search } from '@/pages';
+import { Home, Login, Register, AddHotel, MyHotels, HotelDetails, EditHotel, Search, Booking } from '@/pages';
 import { MyHotelErrorBoundary } from '@/errorBoundaries';
 
 export const router = createBrowserRouter([
@@ -41,6 +41,10 @@ export const router = createBrowserRouter([
       {
         path: ERoutes.ADD_HOTEL,
         element: <AddHotel />
+      },
+      {
+        path: ERoutes.BOOKING + '/:hotelId',
+        element: <Booking />
       },
     ]
   }

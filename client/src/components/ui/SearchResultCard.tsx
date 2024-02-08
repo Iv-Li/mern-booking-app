@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { IHotelRes } from 'server/shared/types'
 import { AiFillStar } from 'react-icons/ai'
+import { ERoutes } from '@/types';
 
 interface ISearchResultCardProps {
   hotel: IHotelRes
@@ -27,7 +28,7 @@ export const SearchResultCard = ({ hotel }: ISearchResultCardProps) => {
             <span className="ml-1 text-sm">{hotel.type}</span>
           </div>
           <Link
-            to={`/detail/${hotel._id}`}
+            to={`${ERoutes.HOTEL_DETAILS}/${hotel._id}`}
             className="text-2xl font-bold cursor-pointer"
           >
             {hotel.name}
@@ -53,7 +54,7 @@ export const SearchResultCard = ({ hotel }: ISearchResultCardProps) => {
           <div className="flex flex-col items-end gap-1">
             <span className="font-bold">£{hotel.pricePerNight} per night</span>
             <Link
-              to={`/detail/${hotel._id}`}
+              to={`${ERoutes.HOTEL_DETAILS}/${hotel._id}`}
               className="bg-blue-600 text-white h-full p-2 font-bold text-xl max-w-fit hover:bg-blue-500"
             >
               View More

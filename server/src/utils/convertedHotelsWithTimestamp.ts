@@ -1,6 +1,6 @@
 import { convertedToTimestamp } from '@/utils/convertedToTimestamp';
 import type { IHotel, IHotelRes } from '@/shared/types';
-import type { Document } from 'mongoose';
+import type { Document, Types } from 'mongoose';
 
 export const convertOneHotelWithTimestamp = (hotel: IHotel): IHotelRes => {
   return {
@@ -9,7 +9,7 @@ export const convertOneHotelWithTimestamp = (hotel: IHotel): IHotelRes => {
   }
 }
 
-export const convertedHotelsWithTimestamp = <T extends Document<unknown, {}, IHotel> & IHotel & Required<{_id: string}>>(hotelsData: T[]): IHotelRes[] => {
+export const convertedHotelsWithTimestamp = <T extends Document<unknown, {}, IHotel> & IHotel & Required<{_id: Types.ObjectId}>>(hotelsData: T[]): IHotelRes[] => {
   return hotelsData.map(hotel => {
     return convertOneHotelWithTimestamp(hotel.toObject())
   });

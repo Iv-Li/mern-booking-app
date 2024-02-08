@@ -1,6 +1,6 @@
 import { RegisterFormData, LoginFormData } from '@/types';
 import { throwError } from '@/utils';
-import type { IHotelSearchRes, IMyHotelDetailsRes, MyHotelsRes } from 'server/shared/types';
+import type { IHotelSearchRes, IMyHotelDetailsRes, MyHotelsRes, IUserRes } from 'server/shared/types';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
@@ -159,4 +159,15 @@ export const searchHotels = async (searchParams: ISearchQuery): Promise<IHotelSe
   }
 
   return resBody
+}
+
+export const fetchCurrentUser = async (): Promise<IUserRes | never> => {
+  const res = await fetch(`${BASE_URL}/users/me`, {
+    credentials: 'include'
+  })
+
+  if(!res.ok) {
+    throwError('User not found')
+  }
+  return res.json()
 }

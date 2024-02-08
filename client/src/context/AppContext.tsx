@@ -1,4 +1,4 @@
-import { type PropsWithChildren, createContext, useState, useContext } from 'react';
+import { type PropsWithChildren, createContext, useState, useContext, useMemo } from 'react';
 import { Toast } from '@/components/ui';
 
 type ToastMessage = {
@@ -13,10 +13,13 @@ const AppContext = createContext<IAppContext | null>(null)
 const AppContextProvider = ({ children }: PropsWithChildren) => {
   const [toastMsg, setToastMsg] = useState<ToastMessage | null>(null)
 
-  return (
-    <AppContext.Provider value={{
+  const value = useMemo(() => {
+    return {
       showToast: (msg: ToastMessage) => setToastMsg(msg)
-    }}>
+    }
+  }, [setToastMsg])
+  return (
+    <AppContext.Provider value={value}>
       {toastMsg && (
         <Toast
           message={toastMsg.message}

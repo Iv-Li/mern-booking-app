@@ -8,7 +8,7 @@ import { GuestFormInfo } from '@/components/logic';
 export const HotelDetails = () => {
   const { hotelId } = useParams()
   const { data } = useQuery({
-    queryKey: ['fetchMyHotelById'],
+    queryKey: ['fetchMyHotelById', hotelId],
     queryFn: () => fetchMyHotelById(hotelId || ''),
     enabled: !!hotelId
   })

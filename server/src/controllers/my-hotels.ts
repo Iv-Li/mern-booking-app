@@ -7,6 +7,7 @@ import type { IHotel } from '@/shared/types/types';
 import { uploadImagesToCloud } from '@/utils/uploadFiles';
 import type { IMyHotelDetailsRes, MyHotelsRes } from '@/shared/types';
 import { convertedHotelsWithTimestamp, convertOneHotelWithTimestamp } from '@/utils';
+import {Types} from 'mongoose';
 const getAllMyHotels = async (req: Request, res: Response<MyHotelsRes>): Promise<void>  => {
   try {
     const { _id } = req.user
@@ -44,12 +45,12 @@ const addMyHotel = async (req: Request, res: Response<IMyHotelDetailsRes>): Prom
   const imgUrls = await uploadImagesToCloud(files)
 
   myHotel.imageUrls = imgUrls
-  myHotel.userId = userId
+  myHotel.userId = new Types.ObjectId(userId)
   myHotel.lastUpdated = new Date()
 
   const hotel = await Hotel.create(myHotel)
 
-  res.status(StatusCodes.CREATED).json({ message: 'success', data: convertOneHotelWithTimestamp(hotel)  })
+  res.status(StatusCodes.CREATED).json({ message: 'success', data: convertOneHotelWithTimestamp(hotel.toObject())  })
 
 }
 

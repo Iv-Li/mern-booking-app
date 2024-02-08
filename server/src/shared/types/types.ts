@@ -1,5 +1,6 @@
 import { type Model } from 'mongoose';
 import { type Request } from 'express';
+import { Types } from 'mongoose';
 interface IUser {
   _id: string
   firstName: string
@@ -20,27 +21,54 @@ interface TypedRequestBody<T> extends Request {
   body: T
 }
 
+type HotelTypes =
+  | 'Budget'
+  | 'Boutique'
+  | 'Luxury'
+  | 'Ski Resort'
+  | 'Business'
+  | 'Family'
+  |'Romantic'
+  | 'Hiking Resort'
+  | 'Cabin'
+  | 'Beach Resort'
+  | 'Golf Resort'
+  | 'Motel'
+  | 'All Inclusive'
+  | 'Pet Friendly'
+  | 'Self Catering'
+
+type HotelFacilities =
+  'Free WiFi'
+  | 'Parking'
+  | 'Airport Shuttle'
+  | 'Family Rooms'
+  | 'Non-Smoking Rooms'
+  | 'Outdoor Pool'
+  | 'Spa'
+  | 'Fitness Center'
+
 interface IHotel {
-  _id: string;
-  userId: string;
+  _id: Types.ObjectId;
+  userId: Types.ObjectId;
   name: string;
   city: string;
   country: string;
   description: string;
-  type: string;
+  type: HotelTypes;
   adultCount: number;
   childCount: number;
-  facilities: string[];
+  facilities: HotelFacilities[];
   pricePerNight: number;
   starRating: number;
   imageUrls: string[];
   lastUpdated: Date;
-  bookings: IBooking[];
+  bookings: Types.ObjectId[];
 }
 
 interface IBooking {
-  _id: string;
-  userId: string;
+  _id: Types.ObjectId;
+  userId: Types.ObjectId;
   firstName: string;
   lastName: string;
   email: string;
@@ -49,6 +77,7 @@ interface IBooking {
   checkIn: Date;
   checkOut: Date;
   totalCost: number;
+  hotelId: Types.ObjectId;
 }
 
 type SearchQueries = 'destination' | 'adultCount' | 'childCount' | 'facilities' | 'types' | 'stars' | 'maxPrice' | 'page'
@@ -61,6 +90,7 @@ type SearchQueryMap = {
 }
 
 export type {
+  HotelFacilities, HotelTypes,
   IUser, IUserMethods, IUserModel,
   TypedRequestBody,
   IHotel, IBooking,

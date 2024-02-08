@@ -1,4 +1,4 @@
-import type { IHotel } from '@/shared/types/types';
+import type { IHotel, IUser } from '@/shared/types/types';
 
 export interface ResMessage {
   message: 'success' | 'failed'
@@ -21,4 +21,8 @@ export interface MyHotelsRes extends ResMessage {
 
 export interface IMyHotelDetailsRes extends ResMessage {
   data: IHotelRes
+}
+
+export interface IUserRes extends ResMessage {
+  data: IUser
 }
