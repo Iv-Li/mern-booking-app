@@ -34,8 +34,12 @@ export interface IBookingRes extends ResMessage {
 export interface IUserHotelWithBooking {
   _id: string
   hotel: IHotel
-  booking: IBooking[]
+  bookings: IBooking[]
 }
 export interface IAllUserBookingRes extends ResMessage {
+  data: IUserHotelWithBooking[]
+}
+
+export interface IAllMyBookingRes extends ResMessage {
   data: IUserHotelWithBooking[]
 }

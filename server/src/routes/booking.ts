@@ -1,14 +1,14 @@
 import express from 'express';
-import { addBooking, getAllMyBooking, getAllUserBooking } from '@/controllers/booking';
+import { addBooking, getAllGuestBooking, getAllHostBooking } from '@/controllers/booking';
 import { verifyToken } from '@/middleware';
 
 const router = express.Router()
 
-router.route('/')
-  .get(verifyToken, getAllUserBooking)
+router.route('/guest')
+  .get(verifyToken, getAllGuestBooking)
   .post(verifyToken, addBooking)
 
-router.route('/my')
-  .get(verifyToken, getAllMyBooking)
+router.route('/host')
+  .get(verifyToken, getAllHostBooking)
 
 export default router

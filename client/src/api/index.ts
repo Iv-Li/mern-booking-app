@@ -171,3 +171,25 @@ export const fetchCurrentUser = async (): Promise<IUserRes | never> => {
   }
   return res.json()
 }
+
+export const fetchMyBookings = async (): Promise<IUserRes | never> => {
+  const res = await fetch(`${BASE_URL}/bookings/host`, {
+    credentials: 'include'
+  })
+
+  if(!res.ok) {
+    throwError('Bookings not found')
+  }
+  return res.json()
+}
+
+export const fetchGuestBookings = async (): Promise<IUserRes | never> => {
+  const res = await fetch(`${BASE_URL}/bookings/guest`, {
+    credentials: 'include'
+  })
+
+  if(!res.ok) {
+    throwError('Bookings not found')
+  }
+  return res.json()
+}

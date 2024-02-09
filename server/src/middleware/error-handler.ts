@@ -21,6 +21,7 @@ const validationErrorHandler = (res: Response, err: Error.ValidationError): void
 }
 
 export const errorHandler: ErrorRequestHandler = (err, _req, res, _next)  => {
+  console.log({err})
   if (err instanceof CustomError) return res.status(err.statusCode).json({ message: err.message })
 
   /* MONGO ERRORS */

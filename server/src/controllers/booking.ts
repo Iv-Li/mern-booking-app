@@ -25,7 +25,7 @@ export const addBooking = async (req: Request<{}, IBooking>, res: Response<IBook
   res.status(StatusCodes.CREATED).json({ data: booking, message: 'success' })
 }
 
-export const getAllUserBooking = async (req: Request<{ hotelId: string }>, res: Response<IAllUserBookingRes>): Promise<void> => {
+export const getAllGuestBooking = async (req: Request, res: Response<IAllUserBookingRes>): Promise<void> => {
   const { _id } = req.user
   const userId = new Types.ObjectId(_id)
   const existedHotel = await Booking.aggregate<IUserHotelWithBooking>([
@@ -56,7 +56,7 @@ export const getAllUserBooking = async (req: Request<{ hotelId: string }>, res: 
 }
 
 
-export const getAllMyBooking = async (req: Request<{ hotelId: string }>, res: Response<IAllUserBookingRes>): Promise<void> => {
+export const getAllHostBooking = async (req: Request, res: Response<IAllUserBookingRes>): Promise<void> => {
   const { _id } = req.user
   const userId = new Types.ObjectId(_id)
   const existedHotel = await Hotel.aggregate<IUserHotelWithBooking>([
