@@ -9,6 +9,8 @@ export enum ERoutes {
   HOST_HOTELS = '/hotels/host',
   LOGIN = '/login',
   REGISTER = '/register',
+  PRIVACY_POLICY = '/privacy-policy',
+  TERMS_OF_USE = '/terms-of-use',
 }
 
 export const setRoutes = {

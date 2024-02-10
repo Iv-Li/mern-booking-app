@@ -5,7 +5,7 @@ import { BadRequest } from '@/errors';
 import { User } from '@/models';
 import { checkFieldValidation, jwt, validators } from '@/utils';
 import type { TypedRequestBody, IUser } from '@/shared/types/types';
-import { ILogout, IUserRes } from '@/shared/types';
+import type { ILogout, IUserRes } from '@/shared/types';
 const { firstNameValidator, lastNameValidator, emailValidator, passwordValidator } = validators
 
 const registerValidation = (): ValidationChain[] =>

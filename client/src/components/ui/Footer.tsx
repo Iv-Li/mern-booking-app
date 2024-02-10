@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+import { ERoutes } from '@/types';
 export const Footer = () => {
   return (
     <footer className="bg-blue-800 py-10">
@@ -6,8 +8,8 @@ export const Footer = () => {
           Iv.G.Holiday.com
         </span>
         <span className="text-white font-bold tracking-tight flex gap-4">
-          <p className="cursor-pointer">Privacy Policy</p>
-          <p className="cursor-pointer">Terms of Service</p>
+          <Link className="cursor-pointer" to={ERoutes.PRIVACY_POLICY}>Privacy Policy</Link>
+          <Link className="cursor-pointer" to={ERoutes.TERMS_OF_USE}>Terms of Service</Link>
         </span>
       </div>
     </footer>

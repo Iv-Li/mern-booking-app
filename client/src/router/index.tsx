@@ -11,7 +11,8 @@ import {
   MyHotels,
   Register,
   Search,
-  DoneBookings
+  DoneBookings,
+  TermsOfUse
 } from '@/pages';
 import { MyHotelErrorBoundary } from '@/errorBoundaries';
 
@@ -60,6 +61,10 @@ export const router = createBrowserRouter([
       {
         path: ERoutes.BOOKING,
         element: <Booking />
+      },
+      {
+        path: ERoutes.TERMS_OF_USE,
+        element: <TermsOfUse />
       },
     ]
   }
