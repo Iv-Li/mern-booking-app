@@ -34,7 +34,7 @@ export const ImgSection = () => {
 
   const pushIntoImageFiles = (e: ChangeEvent<HTMLInputElement>): void => {
     const uploaded = e.target.files
-    console.log({ pushIntoImageFiles: uploaded })
+
     const allCurrentUploaded = combineSeveralFileList(uploaded, transformUrlIntoFiles(uploadedImgUrls))
     setValue("imageFiles", allCurrentUploaded)
   }

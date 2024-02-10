@@ -1,9 +1,10 @@
 import type { Request, Response } from 'express';
 import { Hotel } from '@/models';
-import { constructedSearchQuery, convertedHotelsWithTimestamp } from '@/utils';
+import { constructedSearchQuery, convertedHotelsWithTimestamp, convertOneHotelWithTimestamp } from '@/utils';
 import { StatusCodes } from 'http-status-codes';
-import type { SearchQueryMap, IHotelSearchRes } from '@/shared/types';
+import type { SearchQueryMap, IHotelSearchRes, IMyHotelDetailsRes } from '@/shared/types';
 import { setSortOption } from '@/utils/constructedQuery';
+import { NotFound } from '@/errors';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 const searchHotel = async (req: Request<{}, {}, {}, SearchQueryMap>, res: Response<IHotelSearchRes>): Promise<void> => {
@@ -16,7 +17,7 @@ const searchHotel = async (req: Request<{}, {}, {}, SearchQueryMap>, res: Respon
   const sortOprions  = setSortOption(req.query.sortOption)
   const hotels = await Hotel.find(query).sort(sortOprions).skip(skip).limit(pageSize)
   const total = await Hotel.countDocuments(query)
-  console.log({hotels})
+
   const response = {
     message: 'success',
     data: convertedHotelsWithTimestamp(hotels),
@@ -30,6 +31,19 @@ const searchHotel = async (req: Request<{}, {}, {}, SearchQueryMap>, res: Respon
   res.status(StatusCodes.OK).json(response)
 }
 
+const getOneHotel = async (req: Request, res: Response<IMyHotelDetailsRes>): Promise<void> => {
+  const { hotelId } = req.params
+
+  const hotel = await Hotel.findOne({ _id: hotelId })
+
+  if(!hotel) {
+    throw new NotFound('Hotel not found')
+  }
+
+  res.status(StatusCodes.OK).json({ message: 'success', data: convertOneHotelWithTimestamp(hotel.toObject()) })
+}
+
 export {
-  searchHotel
+  searchHotel,
+  getOneHotel
 }

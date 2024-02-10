@@ -73,8 +73,7 @@ export const Search = () => {
   const onPriceChange = useCallback((price?: number) => {
     setSelectedPrice(price)
   }, [setSelectedPrice])
-  console.log({ pagination: data?.pagination})
-  console.log(data?.pagination?.pages)
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-5">
       <div className="rounded-lg border border-slate-300 p-5 h-fit sticky top-10">

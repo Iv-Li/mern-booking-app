@@ -5,6 +5,7 @@ import { register as apiRegister } from '@/api'
 import { useAppContext } from '@/context/AppContext.tsx';
 import { useNavigate } from 'react-router-dom';
 import { ERoutes } from '@/types';
+import { Button } from '@/components/ui/buttons';
 
 export const Register = () => {
   const { showToast } = useAppContext()
@@ -105,12 +106,9 @@ export const Register = () => {
         )}
       </label>
       <span>
-        <button
-          type="submit"
-          className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl"
-        >
+        <Button type="submit">
           Create Account
-        </button>
+        </Button>
       </span>
     </form>
   )

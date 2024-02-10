@@ -7,6 +7,7 @@ import { GuestSection } from '@/components/logic/HotelForm/GuestSection.tsx';
 import { ImgSection } from '@/components/logic/HotelForm/ImgSection.tsx';
 import { IHotelRes } from 'server/shared/types';
 import { useEffect } from 'react';
+import { Button } from '@/components/ui/buttons';
 
 interface IAddHotelForm {
   hotel: IHotelRes | undefined
@@ -15,7 +16,7 @@ interface IAddHotelForm {
 }
 export const HotelForm = ({ onSave, isLoading, hotel }: IAddHotelForm) => {
   const formMethods = useForm<HotelFormData>()
-  const { handleSubmit, reset, formState: { isValid, errors,  } } = formMethods
+  const { handleSubmit, reset, formState: { isValid  } } = formMethods
 
   useEffect(() => {
     if (!hotel) return
@@ -85,8 +86,6 @@ export const HotelForm = ({ onSave, isLoading, hotel }: IAddHotelForm) => {
     onSave(formData)
   })
 
-  console.log({ isValid, errors })
-
   return (
     <FormProvider {...formMethods}>
       <form onSubmit={onSubmit}>
@@ -96,13 +95,13 @@ export const HotelForm = ({ onSave, isLoading, hotel }: IAddHotelForm) => {
         <GuestSection/>
         <ImgSection/>
         <span className="flex justify-end">
-          <button
+          <Button
             disabled={isLoading}
             type="submit"
-            className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl disabled:bg-gray-500"
+            className="disabled:bg-gray-500"
           >
             {isLoading ? "Saving..." : "Save"}
-          </button>
+          </Button>
         </span>
       </form>
     </FormProvider>

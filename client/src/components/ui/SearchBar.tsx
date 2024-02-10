@@ -5,6 +5,7 @@ import { ERoutes } from '@/types';
 import { MdTravelExplore } from "react-icons/md"
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css"
+import { Button } from '@/components/ui/buttons';
 export const SearchBar = () => {
   const search = useSearchContext()
   const [destination, setDestination] = useState(search.destination)
@@ -96,12 +97,8 @@ export const SearchBar = () => {
         />
       </div>
       <div className="flex gap-1">
-        <button className="w-2/3 bg-blue-600 text-white h-full p-2 font-bold text-xl hover:bg-blue-500">
-          Search
-        </button>
-        <button className="w-1/3 bg-red-600 text-white h-full p-2 font-bold text-xl hover:bg-red-500">
-          Clear
-        </button>
+        <Button className="w-2/3 h-full">Search</Button>
+        <Button className="w-1/3 h-full" variant="danger">Clear</Button>
       </div>
     </form>
   )

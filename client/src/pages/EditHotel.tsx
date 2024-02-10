@@ -1,12 +1,12 @@
 import { HotelForm } from '@/components/logic';
 import { useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { fetchMyHotelById, editMyHotel } from '@/api';
+import { fetchHotelById, editMyHotel } from '@/api';
 export const EditHotel = () => {
   const { hotelId } = useParams()
   const { data } = useQuery({
     queryKey: ['fetchHotelQuery'],
-    queryFn: () => fetchMyHotelById(hotelId || ''),
+    queryFn: () => fetchHotelById(hotelId || ''),
     enabled: true
   })
   const hotel = data?.data

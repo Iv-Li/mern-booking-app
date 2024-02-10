@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
 import { ERoutes } from '@/types';
 import { SignOutButton } from '@/components/ui/SignOutButton.tsx';
+import { useAppContext } from '@/context';
 
 export const Header = () => {
-  const isLogged = false
+  const { user: isLogged } = useAppContext()
 
   return (
     <header className="bg-blue-800 pt-6 pb-14">
@@ -16,13 +17,13 @@ export const Header = () => {
             <>
               <Link
                 className="flex items-center text-white px-3 font-bold hover:bg-blue-600"
-                to={ERoutes.MY_BOOKINGS}
+                to={ERoutes.DONE_BOOKINGS}
               >
                 Bookings
               </Link>
               <Link
                 className="flex items-center text-white px-3 font-bold hover:bg-blue-600"
-                to={ERoutes.MY_HOTELS}
+                to={ERoutes.HOST_HOTELS}
               >
                 My Hotels
               </Link>

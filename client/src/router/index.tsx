@@ -11,8 +11,7 @@ import {
   MyHotels,
   Register,
   Search,
-  HostBooking,
-  GuestBooking
+  DoneBookings
 } from '@/pages';
 import { MyHotelErrorBoundary } from '@/errorBoundaries';
 
@@ -34,7 +33,7 @@ export const router = createBrowserRouter([
         element: <Login />
       },
       {
-        path: ERoutes.MY_HOTELS,
+        path: ERoutes.HOST_HOTELS,
         element: <MyHotels />,
         errorElement: <MyHotelErrorBoundary />
       },
@@ -47,12 +46,8 @@ export const router = createBrowserRouter([
         element: <EditHotel />
       },
       {
-        path: ERoutes.HOST_BOOKINGS,
-        element: <HostBooking />
-      },
-      {
-        path: ERoutes.GUEST_BOOKINGS,
-        element: <GuestBooking />
+        path: ERoutes.DONE_BOOKINGS,
+        element: <DoneBookings />
       },
       {
         path: ERoutes.SEARCH,
@@ -63,7 +58,7 @@ export const router = createBrowserRouter([
         element: <AddHotel />
       },
       {
-        path: ERoutes.BOOKING + '/:hotelId',
+        path: ERoutes.BOOKING,
         element: <Booking />
       },
     ]

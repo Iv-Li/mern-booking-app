@@ -1,10 +1,11 @@
-import { type Response } from 'express';
+import type { Response, Request } from 'express';
 import { type ValidationChain } from 'express-validator';
 import { StatusCodes } from 'http-status-codes';
 import { BadRequest } from '@/errors';
 import { User } from '@/models';
 import { checkFieldValidation, jwt, validators } from '@/utils';
 import type { TypedRequestBody, IUser } from '@/shared/types/types';
+import { ILogout, IUserRes } from '@/shared/types';
 const { firstNameValidator, lastNameValidator, emailValidator, passwordValidator } = validators
 
 const registerValidation = (): ValidationChain[] =>
@@ -62,9 +63,23 @@ const login = async (req: TypedRequestBody<IUser>, res: Response): Promise<void 
 }
 
 
+const logout = (_req: Request, res: Response<ILogout>): void => {
+  res.cookie('token', '', {
+    expires: new Date(0)
+  })
+  res.status(StatusCodes.OK).json({ message: 'success', data: undefined })
+}
+
+const validateToken =(req: Request, res: Response<IUserRes>): void => {
+  res.status(StatusCodes.OK).json({ message: 'success', data: req.user })
+}
+
+
 export {
   register,
   registerValidation,
   login,
-  loginValidation
+  loginValidation,
+  logout,
+  validateToken
 }

@@ -1,30 +1,20 @@
 import { RegisterFormData, LoginFormData } from '@/types';
 import { throwError } from '@/utils';
-import type { IHotelSearchRes, IMyHotelDetailsRes, MyHotelsRes, IUserRes } from 'server/shared/types';
+import {
+  IHotelSearchRes,
+  IMyHotelDetailsRes,
+  MyHotelsRes,
+  IUserRes,
+  ILogout,
+  IHotelRes,
+  IAllUserBookingRes
+} from 'server/shared/types';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
-export type RegisterFn = (formData: RegisterFormData) => Promise<void>
+export type RegisterFn = (formData: RegisterFormData) => Promise<IUserRes> | never
 export const register: RegisterFn = async (formData) => {
   const res = await fetch(`${BASE_URL}/auth/register`, {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(formData)
-  })
-
-  const resBody = await res.json()
-
-  if (!res.ok) {
-    throwError(resBody)
-  }
-}
-
-export const login = async (formData: LoginFormData) => {
-  console.log({ url: BASE_URL})
-  const res = await fetch(`${BASE_URL}/auth/login`, {
     method: 'POST',
     credentials: 'include',
     headers: {
@@ -42,7 +32,51 @@ export const login = async (formData: LoginFormData) => {
   return resBody
 }
 
-export const addHotel = async (formData: FormData) => {
+export const login = async (formData: LoginFormData): Promise<IUserRes> | never => {
+  const res = await fetch(`${BASE_URL}/auth/login`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(formData)
+  })
+
+  const resBody = await res.json()
+
+  if (!res.ok) {
+    throwError(resBody)
+  }
+
+  return resBody as IUserRes
+}
+
+export const logout = async (): Promise<ILogout | never> => {
+  const res = await fetch(`${BASE_URL}/auth/logout`, {
+    method: 'POST',
+    credentials: 'include'
+  })
+
+  if(!res.ok) {
+    throwError('Error signing out')
+  }
+
+  return res.json()
+}
+
+export const validateToken = async (): Promise<IUserRes> | never => {
+  const res = await fetch(`${BASE_URL}/auth/validate-token`, {
+    credentials: 'include'
+  })
+
+  if(!res.ok) {
+    throwError('Error validating token')
+  }
+
+  return res.json()
+}
+
+export const addHotel = async (formData: FormData): Promise<IHotelRes> | never => {
   const res = await fetch(`${BASE_URL}/my-hotels`, {
     method: 'POST',
     credentials: 'include',
@@ -74,8 +108,8 @@ export const fetchMyHotels = async (): Promise<MyHotelsRes> | never => {
   return res.json()
 }
 
-export const fetchMyHotelById = async (hotelId: string): Promise<IMyHotelDetailsRes> | never => {
-  const res = await fetch(`${BASE_URL}/my-hotels/${hotelId}`, {
+export const fetchHotelById = async (hotelId: string): Promise<IMyHotelDetailsRes> | never => {
+  const res = await fetch(`${BASE_URL}/hotels/${hotelId}`, {
     method: 'GET',
     credentials: 'include',
   })
@@ -135,7 +169,7 @@ export const searchHotels = async (searchParams: ISearchQuery): Promise<IHotelSe
     maxPrice,
     sortOption
   } = searchParams
-  console.log('WORK')
+
   const queryParams = new URLSearchParams()
 
   destination && queryParams.append('destination', destination)
@@ -172,7 +206,7 @@ export const fetchCurrentUser = async (): Promise<IUserRes | never> => {
   return res.json()
 }
 
-export const fetchMyBookings = async (): Promise<IUserRes | never> => {
+export const fetchMyBookings = async (): Promise<IAllUserBookingRes | never> => {
   const res = await fetch(`${BASE_URL}/bookings/host`, {
     credentials: 'include'
   })
@@ -183,7 +217,7 @@ export const fetchMyBookings = async (): Promise<IUserRes | never> => {
   return res.json()
 }
 
-export const fetchGuestBookings = async (): Promise<IUserRes | never> => {
+export const fetchGuestBookings = async (): Promise<IAllUserBookingRes | never> => {
   const res = await fetch(`${BASE_URL}/bookings/guest`, {
     credentials: 'include'
   })

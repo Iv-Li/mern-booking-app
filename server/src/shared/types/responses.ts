@@ -3,6 +3,11 @@ import type { IHotel, IUser, IBooking } from '@/shared/types/types';
 export interface ResMessage {
   message: 'success' | 'failed'
 }
+
+export interface ILogout extends ResMessage {
+  data: undefined
+}
+
 export interface IHotelRes extends Omit<IHotel, 'lastUpdated'> {
   lastUpdated: number
 }
@@ -23,8 +28,9 @@ export interface IMyHotelDetailsRes extends ResMessage {
   data: IHotelRes
 }
 
+export type UserType = Omit<IUser, 'password'>
 export interface IUserRes extends ResMessage {
-  data: IUser
+  data: UserType
 }
 
 export interface IBookingRes extends ResMessage {
@@ -37,9 +43,5 @@ export interface IUserHotelWithBooking {
   bookings: IBooking[]
 }
 export interface IAllUserBookingRes extends ResMessage {
-  data: IUserHotelWithBooking[]
-}
-
-export interface IAllMyBookingRes extends ResMessage {
   data: IUserHotelWithBooking[]
 }

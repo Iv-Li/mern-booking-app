@@ -2,7 +2,7 @@ import jwt, { type JwtPayload } from 'jsonwebtoken'
 import { type Response } from 'express';
 import type { IUser } from '@/shared/types/types';
 
-export type UserJWT = Pick<IUser, 'firstName' | 'lastName' | '_id'>
+export type UserJWT = Pick<IUser, 'firstName' | 'lastName' | '_id' | 'email'>
 export interface IUserJWT extends JwtPayload, UserJWT {}
 export const createJWT = ({ payload }: { payload: IUserJWT }): string => {
   return jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: process.env.JWT_LONG})

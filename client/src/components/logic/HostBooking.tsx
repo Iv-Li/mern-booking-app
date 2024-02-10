@@ -1,11 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import { fetchMyBookings } from '@/api'
-import { IAllMyBookingRes } from 'server/shared/types'
 import { BookingElements } from '@/components/ui';
 
 export const HostBooking = () => {
-  const { data } = useQuery<IAllMyBookingRes>({
-    queryKey: ['fetchMyBookings'],
+  const { data } = useQuery({
+    queryKey: ['fetchHostBookings'],
     queryFn: fetchMyBookings
   })
 
@@ -14,6 +13,9 @@ export const HostBooking = () => {
   }
 
   return (
-    <BookingElements lists={data?.data} title="My Hotels` Bookings" />
+    <>
+
+      <BookingElements lists={data?.data} />
+    </>
   )
 }

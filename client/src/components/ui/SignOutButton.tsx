@@ -1,9 +1,22 @@
+import { useMutation } from '@tanstack/react-query';
+import { logout } from '@/api';
+import { useAppContext } from '@/context';
+import { Button } from '@/components/ui/buttons';
+
 export const SignOutButton = () => {
+  const { updateUser } = useAppContext()
+  const { mutate } = useMutation({
+    mutationKey: ['logout'],
+    mutationFn: logout,
+    onSuccess: ({ data  }) =>  updateUser(data)
+  })
+
   return (
-    <button
-      className="text-blue-600 px-3 font-bold bg-white hover:bg-gray-100 "
+    <Button
+      variant="white"
+      onClick={() => mutate()}
     >
       Sign Out
-    </button>
+    </Button>
   )
 }

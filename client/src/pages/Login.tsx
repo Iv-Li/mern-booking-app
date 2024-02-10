@@ -5,8 +5,10 @@ import { useMutation } from '@tanstack/react-query';
 import { useAppContext } from '@/context/AppContext.tsx';
 import { ERoutes } from '@/types';
 import { login } from '@/api';
+import { Button } from '@/components/ui/buttons';
 
 export const Login = () => {
+  const { updateUser } = useAppContext()
   const {
     register,
     handleSubmit,
@@ -18,12 +20,12 @@ export const Login = () => {
 
   const mutation = useMutation({
     mutationFn: login,
-    onSuccess: () => {
+    onSuccess: ({ data }) => {
+      updateUser(data)
       showToast({ message: 'Login success', type: 'success' })
       navigate(ERoutes.HOME)
     },
     onError: (error: Error) => {
-      console.log({ error: error.message })
       showToast({ message: error.message, type: 'error' })
     }
   })
@@ -71,12 +73,7 @@ export const Login = () => {
             Create an account here
           </Link>
         </span>
-        <button
-          type="submit"
-          className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl"
-        >
-          Login
-        </button>
+        <Button type="submit">Login</Button>
       </span>
     </form>
   )

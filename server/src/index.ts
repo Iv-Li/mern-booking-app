@@ -46,8 +46,8 @@ const start = async (): Promise<void> => {
     configCloudinary()
     const server = app.listen(PORT)
 
-    const serverAdress = server.address();
-    console.log({ serverAdress });
+    const serverAddress = server.address();
+    console.log({ serverAddress });
   } catch (err) {
     console.log(err)
   }

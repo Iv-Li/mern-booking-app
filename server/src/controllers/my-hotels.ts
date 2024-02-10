@@ -54,18 +54,6 @@ const addMyHotel = async (req: Request, res: Response<IMyHotelDetailsRes>): Prom
 
 }
 
-const getOneMyHotel = async (req: Request, res: Response<IMyHotelDetailsRes>): Promise<void> => {
-  const { hotelId } = req.params
-  const { _id: userId } = req.user
-
-  const hotel = await Hotel.findOne({ _id: hotelId, userId })
-
-  if(!hotelId || !hotel) {
-    throw new NotFound('Hotel not found')
-  }
-
-  res.status(StatusCodes.OK).json({ message: 'success', data: convertOneHotelWithTimestamp(hotel.toObject()) })
-}
 const editMyHotel = async (req: Request, res: Response): Promise<void> => {
   const { hotelId } = req.params
   const { _id } = req.user
@@ -101,6 +89,5 @@ export {
   getAllMyHotels,
   checkMyHotelFields,
   addMyHotel,
-  getOneMyHotel,
   editMyHotel
 }

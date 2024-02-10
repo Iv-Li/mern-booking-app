@@ -1,5 +1,5 @@
 import { AiFillStar } from "react-icons/ai"
-import { fetchMyHotelById } from '@/api';
+import { fetchHotelById } from '@/api';
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom';
 import { IHotelRes } from 'server/shared/types';
@@ -9,13 +9,13 @@ export const HotelDetails = () => {
   const { hotelId } = useParams()
   const { data } = useQuery({
     queryKey: ['fetchMyHotelById', hotelId],
-    queryFn: () => fetchMyHotelById(hotelId || ''),
+    queryFn: () => fetchHotelById(hotelId || ''),
     enabled: !!hotelId
   })
 
   const hotel: IHotelRes | undefined = data?.data
 
-  if(!hotel) {
+  if(!hotel || !hotelId) {
     return <div>Hotel not found</div>
   }
 
@@ -53,7 +53,7 @@ export const HotelDetails = () => {
       <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr]">
         <div className="whitespace-pre-line">{hotel.description}</div>
         <div className="h-fit">
-          <GuestFormInfo pricePerNight={hotel.pricePerNight} />
+          <GuestFormInfo pricePerNight={hotel.pricePerNight} hotelId={hotelId} />
         </div>
       </div>
     </div>

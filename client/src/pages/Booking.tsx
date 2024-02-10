@@ -2,13 +2,13 @@ import { BookingForm } from '@/components/logic/BookingForm/BookingForm.tsx'
 import { useAppContext, useSearchContext } from '@/context'
 import { BookingDetailSummary } from '@/components/ui'
 import { useQuery } from '@tanstack/react-query';
-import { fetchCurrentUser, fetchMyHotelById } from '@/api';
+import { fetchHotelById } from '@/api';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 
 export const Booking = () => {
-  const { showToast } = useAppContext()
+  const { showToast, user } = useAppContext()
   const { hotelId} = useParams()
   const search = useSearchContext()
   const [numberOfNights, setNumberOfNights] = useState<number>(0)
@@ -21,23 +21,12 @@ export const Booking = () => {
     return false
   }
 
-  const { data: userData } = useQuery(
-    {
-      queryKey: ["fetchCurrentUser"],
-      queryFn: fetchCurrentUser,
-      throwOnError: onError
-    }
-  )
-
   const { data: hotelData } = useQuery({
     queryKey: ['fetchHotelById'],
-    queryFn: () => fetchMyHotelById(hotelId as string),
+    queryFn: () => fetchHotelById(hotelId as string),
     enabled: !!hotelId,
     throwOnError: onError
   })
-
-  console.log({ hotelId })
-  console.log({ userData })
 
   useEffect(() => {
     if (search.checkIn && search.checkOut) {
@@ -52,6 +41,10 @@ export const Booking = () => {
     return <p>Hotel not found</p>
   }
 
+  if (!user) {
+    return <p>Please, sign in at first</p>
+  }
+
   return (
     <div className="grid md:grid-cols-[1fr_2fr]">
       <BookingDetailSummary
@@ -63,7 +56,7 @@ export const Booking = () => {
         hotel={hotelData?.data}
       />
       <BookingForm
-        currentUser={userData?.data}
+        currentUser={user}
       />
     </div>
   )

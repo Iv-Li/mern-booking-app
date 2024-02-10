@@ -1,12 +1,10 @@
 import { IUserHotelWithBooking } from 'server/shared/types';
 interface IBookingElementsProps {
-  title: string
   lists: IUserHotelWithBooking[]
 }
-export const BookingElements = ({ lists, title }: IBookingElementsProps) => {
+export const BookingElements = ({ lists }: IBookingElementsProps) => {
   return (
     <div className="space-y-5">
-      <h1 className="text-3xl font-bold">{title}</h1>
       {lists.map(({ hotel, bookings, _id }) => (
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_3fr] border border-slate-300 rounded-lg p-8 gap-5" key={_id}>
           <div className="lg:w-full lg:h-[250px]">

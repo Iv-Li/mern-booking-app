@@ -1,7 +1,8 @@
 import { useForm } from 'react-hook-form';
-import type { IUser } from 'server/shared/types';
+import type { UserType } from 'server/shared/types';
 import { useSearchContext } from '@/context';
 import { useParams } from 'react-router-dom';
+import { Button } from '@/components/ui/buttons';
 interface BookingFormData {
   firstName: string;
   lastName: string;
@@ -16,7 +17,7 @@ interface BookingFormData {
 }
 
 interface IBookingForm {
-  currentUser: IUser
+  currentUser: UserType
 }
 
 export const BookingForm = ({ currentUser }: IBookingForm) => {
@@ -96,13 +97,13 @@ export const BookingForm = ({ currentUser }: IBookingForm) => {
       </div>
 
       <div className="flex justify-end">
-        <button
+        <Button
           type="submit"
-          className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-md disabled:bg-gray-500"
+          className="text-md disabled:bg-gray-500"
         >
           {/* TODO: add "Saving..." for loading */}
           Confirm Booking
-        </button>
+        </Button>
       </div>
     </form>
   )

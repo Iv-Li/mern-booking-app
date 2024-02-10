@@ -23,6 +23,4 @@ export const verifyToken = (req: Request, _res: Response, next: NextFunction): v
   } catch (err) {
     throw new Unauthenticated('Unauthenticated. Invalid token')
   }
-
-
 }

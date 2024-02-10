@@ -2,13 +2,20 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import type { GuestInfoFormData } from '@/types';
 import DatePicker from 'react-datepicker'
 import { useMemo } from 'react';
+import { useAppContext, useSearchContext } from '@/context';
+import { useNavigate } from 'react-router-dom';
+import { setRoutes, ERoutes } from '@/types/routes.ts';
+import { Button } from '@/components/ui/buttons';
 
 
 interface IGuestFormInfo {
+  hotelId: string,
   pricePerNight: number
 }
-export const GuestFormInfo = ({ pricePerNight }: IGuestFormInfo) => {
-  const isLoggedIn = false
+export const GuestFormInfo = ({ hotelId, pricePerNight }: IGuestFormInfo) => {
+  const { user: isLoggedIn } = useAppContext()
+  const search = useSearchContext()
+  const navigate = useNavigate()
 
   const {
     register,
@@ -18,10 +25,10 @@ export const GuestFormInfo = ({ pricePerNight }: IGuestFormInfo) => {
     handleSubmit
   } = useForm<GuestInfoFormData>({
     defaultValues: {
-      checkIn: new Date(),
-      checkOut: new Date(new Date().getDate() + 30),
-      adultCount: 0,
-      childCount: 0
+      checkIn: search.checkIn,
+      checkOut: search.checkOut,
+      adultCount: search.adultCount,
+      childCount: search.childCount
     }
   })
 
@@ -36,10 +43,27 @@ export const GuestFormInfo = ({ pricePerNight }: IGuestFormInfo) => {
     return { minDate, maxDate }
   }, [])
 
-
+  const onSignInClick = (data: GuestInfoFormData) => {
+    data && search.onSearch({
+      destination: '',
+      checkIn: data.checkIn,
+      checkOut: data.checkOut,
+      adultCount: data.adultCount,
+      childCount: data.childCount,
+    })
+    navigate(ERoutes.LOGIN);
+  }
 
   const onSubmit: SubmitHandler<GuestInfoFormData> = (data) => {
-    console.log({ data })
+    search.onSearch({
+      destination: '',
+      checkIn: data.checkIn,
+      checkOut: data.checkOut,
+      adultCount: data.adultCount,
+      childCount: data.childCount,
+    })
+
+    navigate(setRoutes.BOOKING(hotelId))
   }
 
   return (
@@ -47,7 +71,7 @@ export const GuestFormInfo = ({ pricePerNight }: IGuestFormInfo) => {
       <h3 className="text-md font-bold">£{pricePerNight}</h3>
       <form
         onSubmit={
-          handleSubmit(onSubmit)
+          isLoggedIn ? handleSubmit(onSubmit) : handleSubmit(onSignInClick)
         }
       >
         <div className="grid grid-cols-1 gap-4 items-center">
@@ -117,15 +141,7 @@ export const GuestFormInfo = ({ pricePerNight }: IGuestFormInfo) => {
               </span>
             )}
           </div>
-          {isLoggedIn ? (
-            <button className="bg-blue-600 text-white h-full p-2 font-bold hover:bg-blue-500 text-xl">
-              Book Now
-            </button>
-          ) : (
-            <button className="bg-blue-600 text-white h-full p-2 font-bold hover:bg-blue-500 text-xl">
-              Sign in to Book
-            </button>
-          )}
+          {isLoggedIn ? <Button>Book Now</Button> : <Button>Sign in to Book</Button>}
         </div>
       </form>
     </div>
