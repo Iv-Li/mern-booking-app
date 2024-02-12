@@ -1,7 +1,7 @@
 import type { Model, Types } from 'mongoose';
 import { type Request } from 'express';
 interface IUser {
-  _id: string
+  _id: Types.ObjectId
   firstName: string
   lastName: string
   email: string
@@ -21,6 +21,13 @@ interface IPreValidateUser {
   expireAt: Date
   isValidated: boolean
   verificationToken: string
+}
+
+interface IToken {
+  _id: Types.ObjectId
+  user: Types.ObjectId
+  expireAt: Date
+  passwordToken: string
 }
 
 interface TypedRequestBody<T> extends Request {
@@ -100,5 +107,6 @@ export type {
   IUser, IUserMethods, IUserModel, IPreValidateUser,
   TypedRequestBody,
   IHotel, IBooking,
-  SearchQueryMap, SortingOptions
+  SearchQueryMap, SortingOptions,
+  IToken
 }

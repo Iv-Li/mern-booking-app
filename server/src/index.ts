@@ -1,5 +1,12 @@
+/* eslint-disable import/first */
 import path from 'path';
 import dotenv from 'dotenv'
+
+const mainEnvFile = path.resolve(__dirname, '.env');
+const additionalEnv = path.resolve(__dirname, `.env.${process.env.NODE_ENV}`);
+
+dotenv.config({path: additionalEnv})
+dotenv.config({path: mainEnvFile})
 // import 'module-alias/register'
 import 'express-async-errors'
 import express from 'express'
@@ -12,11 +19,6 @@ import configCloudinary from '@/db/configCloudinary';
 import { authRouter, myHotelsRouter, hotelsRouter, usersRouter, bookingsRouter } from '@/routes';
 import { errorHandler } from '@/middleware';
 
-const mainEnvFile = path.resolve(__dirname, '.env');
-const additionalEnv = path.resolve(__dirname, `.env.${process.env.NODE_ENV}`);
-
-dotenv.config({path: additionalEnv})
-dotenv.config({path: mainEnvFile})
 
 const app = express();
 const PORT = process.env.PORT

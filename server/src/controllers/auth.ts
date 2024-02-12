@@ -1,22 +1,12 @@
 import type { Response, Request } from 'express';
-import { type ValidationChain } from 'express-validator';
 import { StatusCodes } from 'http-status-codes';
 import { BadRequest, Unauthenticated } from '@/errors';
-import { User, PreValidateUser } from '@/models';
-import { checkFieldValidation, jwt, validators } from '@/utils';
+import { User, PreValidateUser, Token } from '@/models';
+import { checkFieldValidation, jwt, sendVerifyEmail, sendResetEmail } from '@/utils';
 import type { TypedRequestBody, IUser } from '@/shared/types/types';
 import type { ILogout, IUserRes } from '@/shared/types';
 import crypto from 'crypto';
-import { sendVerifyEmail } from '@/utils/sendVerifyEmail';
-const { firstNameValidator, lastNameValidator, emailValidator, passwordValidator, verificationTokenValidator } = validators
 
-const registerValidation = (): ValidationChain[] =>
-  ([
-    firstNameValidator(),
-    lastNameValidator(),
-    emailValidator(),
-    passwordValidator()
-  ])
 const register = async (req: TypedRequestBody<IUser>, res: Response): Promise<void | never> => {
   checkFieldValidation(req)
 
@@ -37,17 +27,12 @@ const register = async (req: TypedRequestBody<IUser>, res: Response): Promise<vo
   res.status(StatusCodes.OK).json({ success: 'success', message: 'Check email to verify the account' })
 }
 
-const verifyEmailValidator = (): ValidationChain[] =>
-  ([
-    emailValidator(),
-    verificationTokenValidator()
-  ])
 const verifyEmail = async (req: TypedRequestBody<{email: string, verificationToken: string}>, res: Response): Promise<void> | never => {
   const { email, verificationToken } = req.body
   const user = await User.findOne({ email })
   const prevalidateUser = await PreValidateUser.findOne({ user })
 
-  if(!user || (prevalidateUser?.verificationToken !== verificationToken)) {
+  if(!user || !prevalidateUser || (prevalidateUser?.verificationToken !== verificationToken)) {
     throw new Unauthenticated(`Verification failed`)
   }
 
@@ -61,12 +46,6 @@ const verifyEmail = async (req: TypedRequestBody<{email: string, verificationTok
   res.status(StatusCodes.OK).json({ success: 'success', data: rest })
 
 }
-
-
-const loginValidation = (): ValidationChain[] => ([
-  emailValidator(),
-  passwordValidator()
-])
 
 const login = async (req: TypedRequestBody<IUser>, res: Response): Promise<void | never> => {
   checkFieldValidation(req)
@@ -101,14 +80,59 @@ const validateToken =(req: Request, res: Response<IUserRes>): void => {
   res.status(StatusCodes.OK).json({ message: 'success', data: req.user })
 }
 
+const forgotPassword = async (req: TypedRequestBody<{ email: string }>, res: Response): Promise<void> => {
+  const { email } = req.body
+  const user = await User.findOne({ email })
+
+  if (!user) {
+    throw new Unauthenticated(`User with email ${email} not found`)
+  }
+
+  const token = await Token.findOne({ user })
+  if (token) {
+    await token.deleteOne()
+  }
+
+  const passwordToken = crypto.randomBytes(70).toString('hex')
+  await Token.create({ passwordToken, user: user._id })
+
+  await sendResetEmail({ email, token: passwordToken, origin: process.env.CLIENT_ORIGIN as string })
+  res.status(StatusCodes.OK).json({ success: "success", message: 'Check email fot reset link'})
+}
+
+const resetPassword = async (req: TypedRequestBody<{ email: string, token: string, password: string }>, res: Response): Promise<void> => {
+  const { email, token, password } = req.body
+  const user = await User.findOne({ email })
+
+  if (!user) {
+    throw new Unauthenticated(`User with email ${email} not found`)
+  }
+  const passToken = await Token.findOne({ user: user._id })
+
+  const isTokenExpired = !passToken || new Date() > passToken.expireAt
+  if(isTokenExpired) {
+    throw new Unauthenticated(`Token expired`)
+  }
+
+  const isTokenVerified = passToken?.passwordToken !== token
+  if(isTokenVerified) {
+    throw new Unauthenticated(`Token is not valid`)
+  }
+
+  user.password = password
+  await user.save()
+
+  const { password: pass, ...rest} = user.toObject()
+  res.status(StatusCodes.OK).json({ success: "success", user: rest })
+}
+
 
 export {
   register,
   verifyEmail,
-  verifyEmailValidator,
-  registerValidation,
   login,
-  loginValidation,
   logout,
-  validateToken
+  validateToken,
+  forgotPassword,
+  resetPassword,
 }

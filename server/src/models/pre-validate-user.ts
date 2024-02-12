@@ -17,6 +17,10 @@ const PreValidateUserSchema = new mongoose.Schema<IPreValidateUser>({
     type: Boolean,
     required: true,
     default: false
+  },
+  verificationToken: {
+    type: String,
+    required: true
   }
 })
 

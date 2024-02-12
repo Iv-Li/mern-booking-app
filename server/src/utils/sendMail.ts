@@ -1,14 +1,7 @@
 import nodemailer, { type SendMailOptions } from 'nodemailer'
+import { nodemailerConfig } from '@/utils/nodemailerConfig';
 export const sendMail =  async ({ to, subject, text, html }: SendMailOptions): Promise<void> => {
-  const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.GOOGLE_USER,
-      pass: process.env.GOOGLE_PASS,
-    },
-  })
+  const transporter = nodemailer.createTransport(nodemailerConfig)
 
   await transporter.sendMail({
     from: {

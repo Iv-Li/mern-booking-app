@@ -30,5 +30,37 @@ export const verificationTokenValidator = (): ValidationChain => {
     .isString().withMessage('First name should be a string')
 }
 
+export const registerValidation = (): ValidationChain[] =>
+  ([
+    firstNameValidator(),
+    lastNameValidator(),
+    emailValidator(),
+    passwordValidator()
+  ])
+
+export const verifyEmailValidator = (): ValidationChain[] =>
+  ([
+    emailValidator(),
+    verificationTokenValidator()
+  ])
+
+export const loginValidation = (): ValidationChain[] => ([
+  emailValidator(),
+  passwordValidator()
+])
+
+export const forgotPasswordValidator = (): ValidationChain[] =>
+  ([
+    emailValidator(),
+    verificationTokenValidator()
+  ])
+
+
+export const resetPasswordValidator = (): ValidationChain[] =>
+  ([
+    emailValidator(),
+    verificationTokenValidator(),
+    passwordValidator()
+  ])
 
 
