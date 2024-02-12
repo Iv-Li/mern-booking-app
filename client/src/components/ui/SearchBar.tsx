@@ -16,6 +16,7 @@ export const SearchBar = () => {
   const navigate = useNavigate()
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
+    console.log('WORK')
     search.onSearch({
       destination,
       checkIn,
@@ -97,7 +98,8 @@ export const SearchBar = () => {
         />
       </div>
       <div className="flex gap-1">
-        <Button className="w-2/3 h-full">Search</Button>
+        <Button className="w-2/3 h-full" type="submit">Search</Button>
+        {/* TODO: add action for clear*/}
         <Button className="w-1/3 h-full" variant="danger">Clear</Button>
       </div>
     </form>

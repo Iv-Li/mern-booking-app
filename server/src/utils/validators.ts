@@ -25,4 +25,10 @@ export const passwordValidator = (): ValidationChain => {
     .isLength({ min: 6 }).withMessage('Password should be at least 6 characters long')
 }
 
+export const verificationTokenValidator = (): ValidationChain => {
+  return check('verificationToken')
+    .isString().withMessage('First name should be a string')
+}
+
+
 

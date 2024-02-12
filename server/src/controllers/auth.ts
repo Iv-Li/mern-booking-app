@@ -1,12 +1,14 @@
 import type { Response, Request } from 'express';
 import { type ValidationChain } from 'express-validator';
 import { StatusCodes } from 'http-status-codes';
-import { BadRequest } from '@/errors';
-import { User } from '@/models';
+import { BadRequest, Unauthenticated } from '@/errors';
+import { User, PreValidateUser } from '@/models';
 import { checkFieldValidation, jwt, validators } from '@/utils';
 import type { TypedRequestBody, IUser } from '@/shared/types/types';
 import type { ILogout, IUserRes } from '@/shared/types';
-const { firstNameValidator, lastNameValidator, emailValidator, passwordValidator } = validators
+import crypto from 'crypto';
+import { sendVerifyEmail } from '@/utils/sendVerifyEmail';
+const { firstNameValidator, lastNameValidator, emailValidator, passwordValidator, verificationTokenValidator } = validators
 
 const registerValidation = (): ValidationChain[] =>
   ([
@@ -27,12 +29,37 @@ const register = async (req: TypedRequestBody<IUser>, res: Response): Promise<vo
   }
 
   const user = await User.create({...req.body})
-  const { password: _p, ...rest} = user.toObject()
 
+  const verificationToken = crypto.randomBytes(64).toString('hex')
+  await PreValidateUser.create({ user: user._id, verificationToken })
+  await sendVerifyEmail({ email, verificationToken, origin: process.env.CLIENT_URL as string })
+
+  res.status(StatusCodes.OK).json({ success: 'success', message: 'Check email to verify the account' })
+}
+
+const verifyEmailValidator = (): ValidationChain[] =>
+  ([
+    emailValidator(),
+    verificationTokenValidator()
+  ])
+const verifyEmail = async (req: TypedRequestBody<{email: string, verificationToken: string}>, res: Response): Promise<void> | never => {
+  const { email, verificationToken } = req.body
+  const user = await User.findOne({ email })
+  const prevalidateUser = await PreValidateUser.findOne({ user })
+
+  if(!user || (prevalidateUser?.verificationToken !== verificationToken)) {
+    throw new Unauthenticated(`Verification failed`)
+  }
+
+  prevalidateUser.isValidated = true
+  await prevalidateUser.save()
+
+  const { password: _p, ...rest} = user.toObject()
   const userData = { firstName: rest.firstName, lastName: rest.lastName, email: rest.email, _id: rest._id }
   jwt.attachCookieToResponse({ res, user: userData })
 
   res.status(StatusCodes.OK).json({ success: 'success', data: rest })
+
 }
 
 
@@ -77,6 +104,8 @@ const validateToken =(req: Request, res: Response<IUserRes>): void => {
 
 export {
   register,
+  verifyEmail,
+  verifyEmailValidator,
   registerValidation,
   login,
   loginValidation,

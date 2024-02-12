@@ -8,13 +8,20 @@ interface IUser {
   password: string
 }
 
-
 interface IUserMethods {
   comparePassword(comparePassword: string): Promise<boolean>
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type IUserModel = Model<IUser, {}, IUserMethods>
+
+interface IPreValidateUser {
+  _id: Types.ObjectId
+  user: Types.ObjectId
+  expireAt: Date
+  isValidated: boolean
+  verificationToken: string
+}
 
 interface TypedRequestBody<T> extends Request {
   body: T
@@ -90,7 +97,7 @@ type SearchQueryMap = {
 
 export type {
   HotelFacilities, HotelTypes,
-  IUser, IUserMethods, IUserModel,
+  IUser, IUserMethods, IUserModel, IPreValidateUser,
   TypedRequestBody,
   IHotel, IBooking,
   SearchQueryMap, SortingOptions
