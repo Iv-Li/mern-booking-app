@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .gradient-purple {
+    background: linear-gradient(180.00deg, rgb(242, 239, 255) 38.979%,rgba(242, 239, 255, 0) 100%);
+  }
+}

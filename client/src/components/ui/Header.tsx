@@ -2,12 +2,16 @@ import { Link } from 'react-router-dom';
 import { ERoutes } from '@/types';
 import { SignOutButton } from '@/components/ui/SignOutButton.tsx';
 import { useAppContext } from '@/context';
+import { twMerge } from 'tailwind-merge';
 
-export const Header = () => {
+interface IHeader {
+  className?: string
+}
+export const Header = ({ className }: IHeader) => {
   const { user: isLogged } = useAppContext()
 
   return (
-    <header className="bg-blue-800 pt-6 pb-14">
+    <header className={twMerge(`bg-blue-800 py-6 ${className}`)}>
       <div className="container mx-auto flex justify-between">
         <span className="text-3xl text-white font-bold tracking-tight">
           <Link to={ERoutes.HOME}>Iv.G.Holiday.com</Link>

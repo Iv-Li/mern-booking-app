@@ -23,7 +23,6 @@ export const ForgotPassword = () => {
   })
 
   const onSubmit = handleSubmit(data => {
-    console.log({ data })
     mutate(data)
   })
 

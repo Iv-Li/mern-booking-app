@@ -4,10 +4,11 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom';
 import { IHotelRes } from 'server/shared/types';
 import { GuestFormInfo } from '@/components/logic';
+import { NotFound } from '@/pages/NotFound.tsx';
 
 export const HotelDetails = () => {
   const { hotelId } = useParams()
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['fetchMyHotelById', hotelId],
     queryFn: () => fetchHotelById(hotelId || ''),
     enabled: !!hotelId
@@ -15,8 +16,11 @@ export const HotelDetails = () => {
 
   const hotel: IHotelRes | undefined = data?.data
 
+  if (isLoading) {
+    return <>Loading ... </>
+  }
   if(!hotel || !hotelId) {
-    return <div>Hotel not found</div>
+    return <NotFound />
   }
 
   return (

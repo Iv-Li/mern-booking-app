@@ -16,7 +16,7 @@ export const SearchBar = () => {
   const navigate = useNavigate()
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-    console.log('WORK')
+
     search.onSearch({
       destination,
       checkIn,

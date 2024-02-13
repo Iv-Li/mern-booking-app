@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect } from 'react';
+import { ReactNode, useEffect, useMemo } from 'react';
 import { Header, Footer } from '@/components/ui';
 import { Outlet, useLocation } from 'react-router-dom';
 import { SearchBar } from '@/components/ui';
@@ -8,45 +8,62 @@ import { useAppContext } from '@/context';
 import { ERoutes } from '@/types';
 interface LayoutProps {
   children?: ReactNode
+  isFooterHidden?: boolean
 }
-export const MainLayout = ({ children }: LayoutProps) => {
+export const MainLayout = ({ children, isFooterHidden }: LayoutProps) => {
   const { updateUser } = useAppContext()
   const location = useLocation()
 
-  const enableValidation = useCallback((path: string) => {
-    switch (path) {
-      case ERoutes.LOGIN:
-      case ERoutes.FORGOT_PASSWORD:
-      case ERoutes.RESET_PASSWORD:
-      case ERoutes.REGISTER:
-      case ERoutes.TERMS_OF_USE:
-        return false;
+  const enableValidation = useMemo(() => {
+    switch (location.pathname) {
+      case ERoutes.HOME:
+      case ERoutes.BOOKING:
+      case ERoutes.DONE_BOOKINGS:
+      case ERoutes.HOST_HOTELS:
+      case ERoutes.EDIT_HOTEL:
+      case ERoutes.ADD_HOTEL:
+        return true;
       default:
-        return true
+        return false
     }
-  }, [])
+  }, [location])
 
-  const { data } = useQuery({
+  const enableSearchBar = useMemo(() => {
+    switch (location.pathname) {
+      case ERoutes.HOME:
+      case ERoutes.SEARCH:
+        return true;
+      default:
+        return false
+    }
+  }, [location])
+
+  const { data, isLoading } = useQuery({
     queryKey: ['fetchValidateToken', location],
     queryFn: validateToken,
     retry: false,
-    enabled: enableValidation(location.pathname)
+    enabled: enableValidation
   })
 
   useEffect(() => {
-    updateUser(data?.data)
-  }, [data, updateUser]);
+    if (!isLoading && enableValidation) {
+      updateUser(data?.data)
+    }
+
+  }, [data, isLoading, updateUser, enableValidation]);
 
   return (
     <div className="flex flex-col min-h-screen">
-     <Header />
-      <div className="container mx-auto">
-        <SearchBar />
-      </div>
+     <Header className={enableSearchBar ? "pb-14" : ""} />
+      {enableSearchBar && (
+        <div className="container mx-auto">
+          <SearchBar/>
+        </div>
+      )}
       <main className="container mx-auto flex-1 py-10">
         {children || <Outlet />}
       </main>
-     <Footer />
+      {isFooterHidden || <Footer/>}
     </div>
   )
 }

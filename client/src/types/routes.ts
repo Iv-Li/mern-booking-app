@@ -13,6 +13,7 @@ export enum ERoutes {
   TERMS_OF_USE = '/terms-of-use',
   FORGOT_PASSWORD = '/user/forgot-password',
   RESET_PASSWORD = '/user/reset-password',
+  NOT_FOUND = '/not-found',
 }
 
 export const setRoutes = {
