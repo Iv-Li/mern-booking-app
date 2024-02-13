@@ -11,6 +11,8 @@ export enum ERoutes {
   REGISTER = '/register',
   PRIVACY_POLICY = '/privacy-policy',
   TERMS_OF_USE = '/terms-of-use',
+  FORGOT_PASSWORD = '/user/forgot-password',
+  RESET_PASSWORD = '/user/reset-password',
 }
 
 export const setRoutes = {

@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import type { IToken } from '@/shared/types/types';
 import { EModels } from '@/shared/types';
+import { oneDay } from '@/consts';
 
 const TokenSchema = new mongoose.Schema<IToken>({
   user: {
@@ -10,8 +11,8 @@ const TokenSchema = new mongoose.Schema<IToken>({
   },
   expireAt: {
     type: Date,
-    default: Date.now,
-    index: { expires: '1d' },
+    default: Date.now() + oneDay,
+    index: { expires: '1h' },
   },
   passwordToken: {
     type: String,

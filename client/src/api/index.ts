@@ -1,4 +1,4 @@
-import { RegisterFormData, LoginFormData } from '@/types';
+import type { RegisterFormData, LoginFormData, ForgotPasswordForm } from '@/types';
 import { throwError } from '@/utils';
 import {
   IHotelSearchRes,
@@ -7,7 +7,8 @@ import {
   IUserRes,
   ILogout,
   IHotelRes,
-  IAllUserBookingRes
+  IAllUserBookingRes,
+  IResetPasswordReq
 } from 'server/shared/types';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
@@ -74,6 +75,40 @@ export const validateToken = async (): Promise<IUserRes> | never => {
   }
 
   return res.json()
+}
+
+export const forgotPassword = async (data: ForgotPasswordForm): Promise<void> | never => {
+  const res = await fetch(`${BASE_URL}/auth/forgot-password`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+
+  const resData = await res.json()
+
+  if(!res.ok) {
+    throwError(resData || 'Error getting forgetting password link')
+  }
+}
+
+export const resetPassword = async (data: IResetPasswordReq): Promise<void> | never => {
+  const res = await fetch(`${BASE_URL}/auth/reset-password`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+
+  const resData = await res.json()
+
+  if(!res.ok) {
+    throwError(resData || 'Error getting resetting password')
+  }
 }
 
 export const addHotel = async (formData: FormData): Promise<IHotelRes> | never => {

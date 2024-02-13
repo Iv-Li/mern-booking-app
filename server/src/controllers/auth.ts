@@ -4,7 +4,7 @@ import { BadRequest, Unauthenticated } from '@/errors';
 import { User, PreValidateUser, Token } from '@/models';
 import { checkFieldValidation, jwt, sendVerifyEmail, sendResetEmail } from '@/utils';
 import type { TypedRequestBody, IUser } from '@/shared/types/types';
-import type { ILogout, IUserRes } from '@/shared/types';
+import type { IForgetPassword, ILogout, IUserRes, IResetPasswordReq } from '@/shared/types';
 import crypto from 'crypto';
 
 const register = async (req: TypedRequestBody<IUser>, res: Response): Promise<void | never> => {
@@ -80,8 +80,9 @@ const validateToken =(req: Request, res: Response<IUserRes>): void => {
   res.status(StatusCodes.OK).json({ message: 'success', data: req.user })
 }
 
-const forgotPassword = async (req: TypedRequestBody<{ email: string }>, res: Response): Promise<void> => {
+const forgotPassword = async (req: TypedRequestBody<{ email: string }>, res: Response<IForgetPassword>): Promise<void> | never => {
   const { email } = req.body
+  console.log({ email })
   const user = await User.findOne({ email })
 
   if (!user) {
@@ -96,11 +97,11 @@ const forgotPassword = async (req: TypedRequestBody<{ email: string }>, res: Res
   const passwordToken = crypto.randomBytes(70).toString('hex')
   await Token.create({ passwordToken, user: user._id })
 
-  await sendResetEmail({ email, token: passwordToken, origin: process.env.CLIENT_ORIGIN as string })
-  res.status(StatusCodes.OK).json({ success: "success", message: 'Check email fot reset link'})
+  await sendResetEmail({ email, token: passwordToken, origin: process.env.CLIENT_URL as string })
+  res.status(StatusCodes.OK).json({ message: "success", data: 'Check email fot reset link'})
 }
 
-const resetPassword = async (req: TypedRequestBody<{ email: string, token: string, password: string }>, res: Response): Promise<void> => {
+const resetPassword = async (req: TypedRequestBody<IResetPasswordReq>, res: Response<IUserRes>): Promise<void> => {
   const { email, token, password } = req.body
   const user = await User.findOne({ email })
 
@@ -123,7 +124,7 @@ const resetPassword = async (req: TypedRequestBody<{ email: string, token: strin
   await user.save()
 
   const { password: pass, ...rest} = user.toObject()
-  res.status(StatusCodes.OK).json({ success: "success", user: rest })
+  res.status(StatusCodes.OK).json({ message: "success", data: rest })
 }
 
 

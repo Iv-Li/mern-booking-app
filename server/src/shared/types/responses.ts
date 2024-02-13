@@ -8,6 +8,10 @@ export interface ILogout extends ResMessage {
   data: undefined
 }
 
+export interface IForgetPassword extends ResMessage {
+  data: string
+}
+
 export interface IHotelRes extends Omit<IHotel, 'lastUpdated'> {
   lastUpdated: number
 }

@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import type { IPreValidateUser } from '@/shared/types/types';
 import { EModels } from '@/shared/types';
+import { oneDay } from '@/consts';
 
 const PreValidateUserSchema = new mongoose.Schema<IPreValidateUser>({
   user: {
@@ -10,8 +11,8 @@ const PreValidateUserSchema = new mongoose.Schema<IPreValidateUser>({
   },
   expireAt: {
     type: Date,
-    default: Date.now,
-    index: { expires: '1d' },
+    default: Date.now() + oneDay,
+    index: { expires: '1h' },
   },
   isValidated: {
     type: Boolean,

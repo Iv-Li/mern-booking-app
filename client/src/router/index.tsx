@@ -12,7 +12,9 @@ import {
   Register,
   Search,
   DoneBookings,
-  TermsOfUse
+  TermsOfUse,
+  ForgotPassword,
+  ResetPassword
 } from '@/pages';
 import { MyHotelErrorBoundary } from '@/errorBoundaries';
 
@@ -65,6 +67,14 @@ export const router = createBrowserRouter([
       {
         path: ERoutes.TERMS_OF_USE,
         element: <TermsOfUse />
+      },
+      {
+        path: ERoutes.FORGOT_PASSWORD,
+        element: <ForgotPassword />
+      },
+      {
+        path: ERoutes.RESET_PASSWORD,
+        element: <ResetPassword />
       },
     ]
   }

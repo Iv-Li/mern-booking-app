@@ -66,15 +66,24 @@ export const Login = () => {
           <span className="text-red-500">{errors.password.message}</span>
         )}
       </label>
-      <span className="flex items-center justify-between">
-        <span className="text-sm">
+      <div className="flex items-center justify-between">
+        <div className="text-sm flex flex-col">
+          <span>
           Not Registered?{" "}
-          <Link className="underline" to={ERoutes.REGISTER}>
+            <Link className="underline" to={ERoutes.REGISTER}>
             Create an account here
           </Link>
         </span>
+          <span>
+           Forgot password ?{" "}
+            <Link className="underline" to={ERoutes.FORGOT_PASSWORD}>
+            Reset it here
+          </Link>
+        </span>
+        </div>
+
         <Button type="submit">Login</Button>
-      </span>
+      </div>
     </form>
   )
 }

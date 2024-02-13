@@ -25,7 +25,7 @@ router.route('/verify-email').post(verifyEmailValidator(), verifyEmail)
 router.route('/login').post(loginValidation(), login)
 router.route('/logout').post(logout)
 router.route('/validate-token').get(verifyToken, validateToken)
-router.route('/forgot-password').get(forgotPasswordValidator(), forgotPassword)
-router.route('/reset-password').get(resetPasswordValidator(), resetPassword)
+router.route('/forgot-password').post(forgotPasswordValidator(), forgotPassword)
+router.route('/reset-password').post(resetPasswordValidator(), resetPassword)
 
 export default router

@@ -1,8 +1,6 @@
-import { type PropsWithChildren, createContext, useState, useContext, useMemo, useEffect } from 'react';
+import { type PropsWithChildren, createContext, useState, useContext, useMemo } from 'react';
 import { Toast } from '@/components/ui';
 import { UserType } from 'server/shared/types';
-import { useQuery } from '@tanstack/react-query';
-import { validateToken } from '@/api';
 
 type ToastMessage = {
   message: string;
@@ -19,16 +17,6 @@ const AppContext = createContext<IAppContext | null>(null)
 const AppContextProvider = ({ children }: PropsWithChildren) => {
   const [toastMsg, setToastMsg] = useState<ToastMessage | null>(null)
   const [user, setUser] = useState<UserType | undefined>(undefined)
-
-  const { data } = useQuery({
-    queryKey: ['fetchValidateToken'],
-    queryFn: validateToken,
-    retry: false
-  })
-
-  useEffect(() => {
-    setUser(data?.data)
-  }, [data]);
 
   const value = useMemo(() => {
     return {
