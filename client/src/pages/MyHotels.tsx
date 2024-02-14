@@ -26,7 +26,7 @@ export const MyHotels = () => {
     <div className="space-y-5">
       <span className="flex justify-between">
         <h1 className="text-3xl font-bold">My Hotels</h1>
-        <LinkButton to={ERoutes.ADD_HOTEL}>
+        <LinkButton to={ERoutes.ADD_HOTEL} className="neomorthin">
           Add Hotel
         </LinkButton>
       </span>

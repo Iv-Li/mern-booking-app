@@ -5,10 +5,13 @@ import { useParams } from 'react-router-dom';
 import { IHotelRes } from 'server/shared/types';
 import { GuestFormInfo } from '@/components/logic';
 import { NotFound } from '@/pages/NotFound.tsx';
+import { useThemeContext } from '@/context';
+import { useEffect } from 'react';
 
 export const HotelDetails = () => {
+  const { setBgMain, bgMain } = useThemeContext()
   const { hotelId } = useParams()
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isSuccess } = useQuery({
     queryKey: ['fetchMyHotelById', hotelId],
     queryFn: () => fetchHotelById(hotelId || ''),
     enabled: !!hotelId
@@ -16,12 +19,23 @@ export const HotelDetails = () => {
 
   const hotel: IHotelRes | undefined = data?.data
 
+  useEffect(() => {
+    return () => setBgMain(null)
+  }, [setBgMain]);
+
+  useEffect(() => {
+    if(isSuccess && hotel && !bgMain) {
+      setBgMain(hotel.imageUrls[1])
+    }
+  }, [isSuccess, setBgMain, bgMain, hotel]);
+
   if (isLoading) {
     return <>Loading ... </>
   }
   if(!hotel || !hotelId) {
     return <NotFound />
   }
+
 
   return (
     <div className="space-y-6">

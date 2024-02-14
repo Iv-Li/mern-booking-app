@@ -86,7 +86,7 @@ export const ResetPassword = () => {
             Create an account here
           </Link>
         </span>
-        <Button type="submit">Submit</Button>
+        <Button type="submit" className="neomorthin">Submit</Button>
       </span>
     </form>
   )

@@ -24,7 +24,7 @@ export const NotFound = () => {
         Oops, It's an Error!
       </p>
       <div>
-        <Button onClick={() => navigate(ERoutes.HOME)} className="ml-auto mr-0 block">Go back</Button>
+        <Button onClick={() => navigate(ERoutes.HOME)} className="ml-auto mr-0 block neomorthin">Go back</Button>
       </div>
       <p className="text-center text-slate-500 md:text-l lg:text-xl mt-2">
         The page you were searching for seems to have taken a detour into deep space. But don't worry, we're here to navigate you back.

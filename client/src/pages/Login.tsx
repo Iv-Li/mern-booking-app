@@ -82,7 +82,7 @@ export const Login = () => {
         </span>
         </div>
 
-        <Button type="submit">Login</Button>
+        <Button type="submit" className="neomorthin">Login</Button>
       </div>
     </form>
   )

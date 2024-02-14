@@ -106,7 +106,7 @@ export const Register = () => {
         )}
       </label>
       <span>
-        <Button type="submit">
+        <Button type="submit" className="neomorthin">
           Create Account
         </Button>
       </span>

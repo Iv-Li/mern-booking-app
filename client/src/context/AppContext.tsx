@@ -25,7 +25,7 @@ const AppContextProvider = ({ children }: PropsWithChildren) => {
       updateUser: (user: UserType | undefined) => setUser(user)
     }
   }, [setToastMsg, user, setUser])
-
+  console.log({ user })
 
   return (
     <AppContext.Provider value={value || {}}>

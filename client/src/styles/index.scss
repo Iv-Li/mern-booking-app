@@ -2,6 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@layer base {
+  :root {
+    --bg-main: #BEADFA;
+    --bg-component: #81689D;
+    --text-main: #81689D;
+    --bg-search: #FFF7F1;
+    --bg-tags: #DFCCFB;
+    --bg-blocks: #F1EAFF;
+  }
+
+  .dark {
+    --bg-main: #081229;
+    --bg-component: #353785;
+    --text-main: #4c4fb4;
+    --bg-search: #FC6736;
+    --bg-tags: #AED2FF;
+    --bg-blocks: #BFDBFF;
+  }
+}
+
+
 @layer components {
   .gradient-purple {
     background: linear-gradient(180.00deg, rgb(242, 239, 255) 38.979%,rgba(242, 239, 255, 0) 100%);

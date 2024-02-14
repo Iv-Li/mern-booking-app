@@ -4,7 +4,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { SearchBar } from '@/components/ui';
 import { useQuery } from '@tanstack/react-query';
 import { validateToken } from '@/api';
-import { useAppContext } from '@/context';
+import { useAppContext, useThemeContext } from '@/context';
 import { ERoutes } from '@/types';
 interface LayoutProps {
   children?: ReactNode
@@ -12,6 +12,7 @@ interface LayoutProps {
 }
 export const MainLayout = ({ children, isFooterHidden }: LayoutProps) => {
   const { updateUser } = useAppContext()
+  const { bgMain } = useThemeContext()
   const location = useLocation()
 
   const enableValidation = useMemo(() => {
@@ -51,7 +52,7 @@ export const MainLayout = ({ children, isFooterHidden }: LayoutProps) => {
     }
 
   }, [data, isLoading, updateUser, enableValidation]);
-
+  console.log({ bgMain })
   return (
     <div className="flex flex-col min-h-screen">
      <Header className={enableSearchBar ? "pb-14" : ""} />
@@ -60,8 +61,11 @@ export const MainLayout = ({ children, isFooterHidden }: LayoutProps) => {
           <SearchBar/>
         </div>
       )}
-      <main className="container mx-auto flex-1 py-10">
-        {children || <Outlet />}
+      <main className="flex-1 relative">
+        <div className="absolute inset-0 bg-img -z-20 opacity-10" style={{ backgroundImage: `url(${bgMain || ''})`}}/>
+        <div className="container mx-auto py-10" >
+          {children || <Outlet />}
+        </div>
       </main>
       {isFooterHidden || <Footer/>}
     </div>

@@ -23,7 +23,7 @@ const UpButton = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
   return (
-    <Button onClick={onScrollToUp} className={'block mr-0 ml-auto flex gap-2 items-center'} variant="white">
+    <Button onClick={onScrollToUp} className={'block mr-0 ml-auto flex gap-2 items-center neomorthin'} variant="white">
       <FaArrowUp />
       <span>Наверх</span>
     </Button>

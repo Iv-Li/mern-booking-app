@@ -98,7 +98,7 @@ export const HotelForm = ({ onSave, isLoading, hotel }: IAddHotelForm) => {
           <Button
             disabled={isLoading}
             type="submit"
-            className="disabled:bg-gray-500"
+            className="disabled:bg-gray-500 neomorthin"
           >
             {isLoading ? "Saving..." : "Save"}
           </Button>
